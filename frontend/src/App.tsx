@@ -8,6 +8,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AppLayout from './components/AppLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './contexts/AuthProvider';
+import { colors } from './theme/colors';
 
 // 🚀 Lazy loading các pages để giảm bundle size ban đầu
 const LoginPage = React.lazy(() => import('./pages/LoginPage'));
@@ -46,23 +47,23 @@ const queryClient = new QueryClient({
 
 const theme = {
   token: {
-    // Màu chính - Xanh ngọc đậm
-    colorPrimary: '#0d9488', // Teal 600 - màu chủ đạo
-    colorPrimaryHover: '#0f766e', // Teal 700 - hover
-    colorPrimaryActive: '#115e59', // Teal 800 - active
+    // Màu chính - Thương hiệu
+    colorPrimary: colors.brand,
+    colorPrimaryHover: colors.brandHover,
+    colorPrimaryActive: colors.brandActive,
 
     // Các màu phụ
-    colorSuccess: '#22c55e', // Green 500 - thành công
-    colorWarning: '#f59e0b', // Amber 500 - cảnh báo
-    colorError: '#ef4444', // Red 500 - lỗi
-    colorInfo: '#3b82f6', // Blue 500 - thông tin
+    colorSuccess: colors.success,
+    colorWarning: colors.warning,
+    colorError: colors.danger,
+    colorInfo: colors.info,
 
     // Màu nền và text
-    colorBgLayout: '#f0fdfa', // Teal 50 - nền layout nhẹ nhàng
-    colorText: '#1f2937', // Gray 800 - text chính
-    colorTextSecondary: '#4b5563', // Gray 600 - text phụ
+    colorBgLayout: colors.bg,
+    colorText: colors.text,
+    colorTextSecondary: colors.textSecondary,
     // Mặc định của antd là rgba(0,0,0,.45), không đạt 4.5:1 trên nền trắng.
-    colorTextDescription: '#4b5563',
+    colorTextDescription: colors.textSecondary,
 
     // Border và radius
     borderRadius: 10, // Bo góc nhẹ nhàng
@@ -94,7 +95,7 @@ const theme = {
     },
     Card: {
       borderRadius: 12,
-      boxShadow: '0 1px 3px rgba(0,0,0,0.1)', // Đổ bóng nhẹ
+      boxShadow: colors.shadowCard,
       headerFontSize: 18, // Tiêu đề card tách khỏi cỡ chữ thân bài
     },
     Menu: {
@@ -103,8 +104,8 @@ const theme = {
     },
     Table: {
       borderRadius: 8,
-      headerBg: '#f0fdfa', // Nền header bảng màu teal nhạt
-      headerColor: '#0f766e', // Teal 700
+      headerBg: colors.brandSoft,
+      headerColor: colors.brandInk,
       fontSize: 16,
       cellPaddingBlock: 10, // Chữ to hơn nên siết đệm dòng lại, giữ mật độ bảng
     },

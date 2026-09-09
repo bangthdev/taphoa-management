@@ -11,7 +11,6 @@ const SOURCE_OF_TRUTH = 'theme/colors.ts';
 // Khi mảng rỗng, xoá luôn hằng này cùng nhánh kiểm tra bên dưới.
 const ALLOWLIST = [
   'App.css',
-  'App.tsx',
   'components/AppLayout.tsx',
   'components/chat/ChatInput.tsx',
   'components/chat/ChatMessage.tsx',
