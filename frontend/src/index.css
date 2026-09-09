@@ -141,3 +141,21 @@ html {
   min-height: 44px !important;
   padding-block: 9px;
 }
+
+/* Nút hành động chính đặt trên dải màu đậm phải đảo ngược: mọi màu có sắc đều
+   chìm vào nền tím vì độ sáng xấp xỉ nhau (đo được 2.1–2.5:1), trắng đặc đạt
+   5.38:1. Dùng class thay style inline để trạng thái hover còn hoạt động. */
+.taphoa-primary-action.ant-btn {
+  background: var(--c-on-brand);
+  color: var(--c-brand-active);
+  border: none;
+  font-weight: 600;
+}
+.taphoa-primary-action.ant-btn:not(:disabled):hover {
+  background: var(--c-brand-soft);
+  color: var(--c-brand-active);
+}
+.taphoa-primary-action.ant-btn:not(:disabled):active {
+  background: var(--c-brand-soft-strong);
+  color: var(--c-brand-active);
+}

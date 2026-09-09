@@ -308,7 +308,7 @@ export default function AppLayout() {
             block
             icon={<ShoppingCartOutlined />}
             onClick={() => window.open('/pos', '_blank')}
-            style={{ background: colors.brandGradient, border: 'none' }}
+            className="taphoa-primary-action"
           >
             {!collapsed && 'Bán hàng'}
           </Button>
