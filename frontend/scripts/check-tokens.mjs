@@ -19,7 +19,6 @@ const SIZING = /\b(fontSize|fontWeight|borderRadius)\s*:\s*[0-9]/g;
 // Xác định bằng lệnh:
 // grep -rlE '\b(fontSize|fontWeight|borderRadius)\s*:\s*[0-9]' --include='*.tsx' --include='*.ts' src | sed 's|^src/||' | sort
 const SIZING_ALLOWLIST = new Set([
-  'components/AppLayout.tsx',
   'components/chat/ChatInput.tsx',
   'components/chat/ChatMessage.tsx',
   'components/common/EmptyState.tsx',

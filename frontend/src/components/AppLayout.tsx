@@ -19,7 +19,6 @@ import {
   Layout,
   Menu,
   Button,
-  theme,
   Typography,
   Modal,
   Form,
@@ -38,6 +37,7 @@ import { APP_NAME } from '../constants';
 import { useAuth } from '../contexts/useAuth';
 import { useCurrentShift, useOpenShift, useCloseShift } from '../hooks';
 import { colors } from '../theme/colors';
+import { type, weight, radius, space } from '../theme/typography';
 import type { Shift } from '../types';
 import { formatVND, inputNumberFormatter, getErrorMessage } from '../utils/format';
 
@@ -45,7 +45,7 @@ import ChatWidget from './chat/ChatWidget';
 import { Breadcrumbs } from './common';
 import ErrorBoundary from './ErrorBoundary';
 
-const { Header, Content } = Layout;
+const { Header, Content, Sider } = Layout;
 
 function getMenuItems(role?: string): MenuProps['items'] {
   const items: MenuProps['items'] = [
@@ -121,15 +121,20 @@ export default function AppLayout() {
   const navigate = useNavigate();
   const location = useLocation();
   const { user, logout } = useAuth();
-  const {
-    token: { colorBgContainer, borderRadiusLG },
-  } = theme.useToken();
 
   // Shift management
   const { data: currentShift, isLoading: shiftLoading } = useCurrentShift();
   const openShiftMutation = useOpenShift();
   const closeShiftMutation = useCloseShift();
 
+  // Match /customers/:id → /customers, /invoices/:id → /invoices
+  const selectedKey = location.pathname.replace(/\/\d+$/, '') || '/';
+  const menuItems = useMemo(() => getMenuItems(user?.role), [user?.role]);
+
+  const [collapsed, setCollapsed] = useState(false);
+  // Seed từ getOpenKey như defaultOpenKeys cũ — mode="inline" cần state có
+  // kiểm soát, không thì submenu tự xổ về (defaultOpenKeys chỉ set 1 lần).
+  const [openKeys, setOpenKeys] = useState<string[]>(() => getOpenKey(selectedKey, menuItems));
   const [closeModal, setCloseModal] = useState(false);
   const [openForm] = Form.useForm();
   const [closeForm] = Form.useForm();
@@ -207,63 +212,65 @@ export default function AppLayout() {
     navigate('/login');
   };
 
-  // Match /customers/:id → /customers, /invoices/:id → /invoices
-  const selectedKey = location.pathname.replace(/\/\d+$/, '') || '/';
-  const menuItems = useMemo(() => getMenuItems(user?.role), [user?.role]);
-
   return (
     <Layout style={{ minHeight: '100vh' }}>
-      <Header
-        style={{
-          padding: '0 24px',
-          background: colors.brandGradient,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 24,
-          position: 'sticky',
-          top: 0,
-          zIndex: 100,
-          boxShadow: colors.shadowHeader,
-        }}
+      <Sider
+        width={248}
+        collapsible
+        collapsed={collapsed}
+        onCollapse={setCollapsed}
+        style={{ background: colors.sidebar, display: 'flex', flexDirection: 'column' }}
       >
         {/* Logo */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: space.sm,
+            padding: space.lg,
+            overflow: 'hidden',
+            whiteSpace: 'nowrap',
+          }}
+        >
           <div
             style={{
+              flexShrink: 0,
               width: 36,
               height: 36,
               background: colors.onBrandTint,
-              borderRadius: 10,
+              borderRadius: radius.md,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              fontSize: 20,
-              fontWeight: 'bold',
+              fontSize: type.lead,
+              fontWeight: weight.bold,
               color: colors.onBrand,
             }}
           >
             F
           </div>
-          <Typography.Title
-            level={4}
-            style={{
-              color: colors.onBrand,
-              margin: 0,
-              whiteSpace: 'nowrap',
-              fontWeight: 600,
-              letterSpacing: 0.5,
-            }}
-          >
-            {APP_NAME}
-          </Typography.Title>
+          {!collapsed && (
+            <Typography.Title
+              level={4}
+              style={{
+                color: colors.onBrand,
+                margin: 0,
+                fontWeight: weight.semibold,
+                letterSpacing: 0.5,
+              }}
+            >
+              {APP_NAME}
+            </Typography.Title>
+          )}
         </div>
 
-        {/* Menu ngang */}
+        {/* Menu dọc */}
         <Menu
           theme="dark"
-          mode="horizontal"
+          mode="inline"
           selectedKeys={[selectedKey]}
-          defaultOpenKeys={getOpenKey(selectedKey, menuItems)}
+          openKeys={openKeys}
+          onOpenChange={setOpenKeys}
           items={menuItems}
           onClick={({ key }) => {
             if (!key.startsWith('/')) return;
@@ -273,84 +280,91 @@ export default function AppLayout() {
             }
             navigate(key);
           }}
-          style={{
-            flex: 1,
-            minWidth: 0,
-            borderBottom: 'none',
-            background: 'transparent',
-            fontSize: 15,
-          }}
+          style={{ flex: 1, background: 'transparent', borderInlineEnd: 'none' }}
         />
 
-        {/* Shift info + Thay ca */}
-        {currentShift && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: 10, whiteSpace: 'nowrap' }}>
-            <ClockCircleOutlined style={{ color: colors.onBrandMuted, fontSize: 14 }} />
-            <Typography.Text style={{ color: colors.onBrand, fontSize: 13 }}>
-              Ca #{currentShift.id} &mdash; {currentShift.cashier_name}
-            </Typography.Text>
-            <Button
-              size="small"
-              icon={<SwapOutlined />}
-              onClick={() => {
-                closeForm.resetFields();
-                setCloseModal(true);
-              }}
-              style={{
-                borderColor: colors.onBrandBorder,
-                color: colors.onBrand,
-                background: colors.onBrandActiveBg,
-                borderRadius: 6,
-              }}
-            >
-              Thay ca
-            </Button>
-          </div>
-        )}
-
         {/* User info + logout */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, whiteSpace: 'nowrap' }}>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-            <Typography.Text style={{ color: colors.onBrand, fontWeight: 500, fontSize: 14 }}>
-              {user?.name}
-            </Typography.Text>
-            <Typography.Text style={{ color: colors.onBrandMuted, fontSize: 12 }}>
-              {user?.role === 'admin' ? 'Quản lý' : 'Nhân viên'}
-            </Typography.Text>
-          </div>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: collapsed ? 'center' : 'space-between',
+            gap: space.sm,
+            padding: space.lg,
+            borderTop: `1px solid ${colors.onBrandBorder}`,
+          }}
+        >
+          {!collapsed && (
+            <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+              <Typography.Text
+                ellipsis
+                style={{ color: colors.onBrand, fontWeight: weight.medium, fontSize: type.label }}
+              >
+                {user?.name}
+              </Typography.Text>
+              <Typography.Text style={{ color: colors.onBrandMuted, fontSize: type.label }}>
+                {user?.role === 'admin' ? 'Quản lý' : 'Nhân viên'}
+              </Typography.Text>
+            </div>
+          )}
           <Button
             type="primary"
             ghost
             icon={<LogoutOutlined />}
             onClick={handleLogout}
-            style={{
-              color: colors.onBrand,
-              borderColor: colors.onBrandBorder,
-              borderRadius: 8,
-            }}
+            style={{ color: colors.onBrand, borderColor: colors.onBrandBorder }}
           >
-            Thoát
+            {!collapsed && 'Thoát'}
           </Button>
         </div>
-      </Header>
+      </Sider>
 
-      <Content
-        style={{
-          margin: '24px auto',
-          width: 'calc(100% - 48px)',
-          maxWidth: 1440,
-          padding: 24,
-          background: colorBgContainer,
-          borderRadius: borderRadiusLG,
-          minHeight: 'calc(100vh - 112px)',
-          boxShadow: colors.shadowPanel,
-        }}
-      >
-        <Breadcrumbs />
-        <ErrorBoundary>
-          <Outlet />
-        </ErrorBoundary>
-      </Content>
+      <Layout style={{ background: colors.bg }}>
+        <Header
+          style={{
+            height: 56,
+            background: colors.surface,
+            padding: `0 ${space.xl}px`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            position: 'sticky',
+            top: 0,
+            zIndex: 100,
+            boxShadow: colors.shadowHeader,
+          }}
+        >
+          <Breadcrumbs />
+
+          {/* Ca hiện tại + Thay ca — gắn với phiên làm việc, không phải điều hướng nên ở lại header */}
+          {currentShift && (
+            <div
+              style={{ display: 'flex', alignItems: 'center', gap: space.sm, whiteSpace: 'nowrap' }}
+            >
+              <ClockCircleOutlined style={{ color: colors.textSecondary, fontSize: type.label }} />
+              <Typography.Text style={{ color: colors.textSecondary, fontSize: type.label }}>
+                Ca #{currentShift.id} &mdash; {currentShift.cashier_name}
+              </Typography.Text>
+              <Button
+                size="small"
+                icon={<SwapOutlined />}
+                onClick={() => {
+                  closeForm.resetFields();
+                  setCloseModal(true);
+                }}
+              >
+                Thay ca
+              </Button>
+            </div>
+          )}
+        </Header>
+
+        <Content className="taphoa-content" style={{ padding: space.xl }}>
+          <ErrorBoundary>
+            <Outlet />
+          </ErrorBoundary>
+        </Content>
+      </Layout>
 
       {/* Modal bắt buộc mở ca */}
       <Modal

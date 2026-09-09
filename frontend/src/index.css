@@ -46,6 +46,18 @@ html {
   font-variant-numeric: tabular-nums;
 }
 
+/* Vùng nội dung chính — hai quầng aurora mờ thay cho khung viền xám */
+.taphoa-content {
+  background-image: var(--c-aurora-glow);
+  background-repeat: no-repeat;
+}
+
+/* Card không viền cứng, chỉ bóng mềm hai lớp — theo hướng Aurora */
+.ant-card {
+  border: none;
+  box-shadow: var(--c-shadow-card);
+}
+
 /* Header bảng đọc ra là header nhờ kiểu dáng, không nhờ cỡ chữ */
 .ant-table-thead > tr > th {
   font-weight: 600 !important;
