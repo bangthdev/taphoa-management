@@ -42,3 +42,6 @@ tools/
 
 # Agent Chat UI (app bên thứ 3 — clone, không commit; xem chat-ui.env.example + start-chat.sh)
 chat-ui/
+
+# Bản HTML sinh ra từ file plan .md (chạy lại md2html.py là có, không cần commit)
+docs/superpowers/plans/*.html
