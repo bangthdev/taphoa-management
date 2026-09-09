@@ -45,7 +45,7 @@ import ChatWidget from './chat/ChatWidget';
 import { Breadcrumbs } from './common';
 import ErrorBoundary from './ErrorBoundary';
 
-const { Header, Content, Sider } = Layout;
+const { Header, Content } = Layout;
 
 function getMenuItems(role?: string): MenuProps['items'] {
   const items: MenuProps['items'] = [
@@ -98,22 +98,8 @@ function getMenuItems(role?: string): MenuProps['items'] {
   }
 
   // "Bán hàng" KHÔNG nằm trong menu: nó là hành động chính và mở tab mới, chứ
-  // không phải một trang để xem. Nó được dựng thành nút riêng ở đáy sidebar.
+  // không phải một trang để xem. Nó được dựng thành nút riêng trong header.
   return items;
-}
-
-// Tìm parent key cho submenu mở sẵn
-function getOpenKey(pathname: string, items: MenuProps['items']): string[] {
-  for (const item of items || []) {
-    if (item && 'children' in item && item.children) {
-      for (const child of item.children) {
-        if (child && 'key' in child && child.key === pathname) {
-          return [item.key as string];
-        }
-      }
-    }
-  }
-  return [];
 }
 
 export default function AppLayout() {
@@ -130,10 +116,6 @@ export default function AppLayout() {
   const selectedKey = location.pathname.replace(/\/\d+$/, '') || '/';
   const menuItems = useMemo(() => getMenuItems(user?.role), [user?.role]);
 
-  const [collapsed, setCollapsed] = useState(false);
-  // Seed từ getOpenKey như defaultOpenKeys cũ — mode="inline" cần state có
-  // kiểm soát, không thì submenu tự xổ về (defaultOpenKeys chỉ set 1 lần).
-  const [openKeys, setOpenKeys] = useState<string[]>(() => getOpenKey(selectedKey, menuItems));
   const [closeModal, setCloseModal] = useState(false);
   const [openForm] = Form.useForm();
   const [closeForm] = Form.useForm();
@@ -212,40 +194,24 @@ export default function AppLayout() {
   };
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
-      <Sider
-        width={248}
-        // Pin cứng 80 thay vì để antd tự suy: mặc định collapsedWidth =
-        // controlHeightLG * 2, mà controlHeightLG lại kéo theo controlHeight
-        // toàn cục (40) → ra 100, một con số không ai chọn cho rail thu gọn.
-        collapsedWidth={80}
-        collapsible
-        collapsed={collapsed}
-        onCollapse={setCollapsed}
+    <Layout style={{ minHeight: '100vh', background: colors.bg }}>
+      <Header
         style={{
-          background: colors.sidebar,
+          padding: `0 ${space.xl}px`,
+          background: colors.brandGradient,
           display: 'flex',
-          flexDirection: 'column',
+          alignItems: 'center',
+          gap: space.xl,
           position: 'sticky',
           top: 0,
-          height: '100vh',
-          overflow: 'auto',
+          zIndex: 100,
+          boxShadow: colors.shadowHeader,
         }}
       >
-        {/* Logo */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: space.sm,
-            padding: space.lg,
-            overflow: 'hidden',
-            whiteSpace: 'nowrap',
-          }}
-        >
+        {/* Logo — không co lại: là danh tính thương hiệu, không phải nội dung phụ */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: space.sm, flexShrink: 0 }}>
           <div
             style={{
-              flexShrink: 0,
               width: 36,
               height: 36,
               background: colors.onBrandTint,
@@ -260,162 +226,139 @@ export default function AppLayout() {
           >
             F
           </div>
-          {!collapsed && (
-            <Typography.Title
-              level={4}
-              style={{
-                color: colors.onBrand,
-                margin: 0,
-                fontWeight: weight.semibold,
-                letterSpacing: 0.5,
-              }}
-            >
-              {APP_NAME}
-            </Typography.Title>
-          )}
+          <Typography.Title
+            level={4}
+            style={{
+              color: colors.onBrand,
+              margin: 0,
+              whiteSpace: 'nowrap',
+              fontWeight: weight.semibold,
+              letterSpacing: 0.5,
+            }}
+          >
+            {APP_NAME}
+          </Typography.Title>
         </div>
 
-        {/* Menu dọc */}
+        {/* Menu ngang — mode="horizontal" tự gom mục tràn vào dropdown "…" khi
+            hẹp, nên không cần state openKeys/getOpenKey như menu dọc cũ. */}
         <Menu
           theme="dark"
-          mode="inline"
+          mode="horizontal"
           selectedKeys={[selectedKey]}
-          openKeys={openKeys}
-          onOpenChange={setOpenKeys}
           items={menuItems}
           onClick={({ key }) => {
             if (!key.startsWith('/')) return;
             navigate(key);
           }}
-          // minHeight: 0 bắt buộc để flex item này co lại và tự cuộn thay vì
-          // đẩy khối người dùng phía dưới ra khỏi màn hình.
           style={{
             flex: 1,
-            minHeight: 0,
-            overflowY: 'auto',
+            minWidth: 0,
+            borderBottom: 'none',
             background: 'transparent',
-            borderInlineEnd: 'none',
           }}
         />
 
+        {/* Ca hiện tại + Thay ca — ít quan trọng nhất trong dải header nên là
+            khối đầu tiên co lại (minWidth 0 + ellipsis) khi màn hẹp; icon và
+            nút không co để vẫn bấm được. */}
+        {currentShift && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: space.sm, minWidth: 0 }}>
+            <ClockCircleOutlined
+              style={{ color: colors.onBrandMuted, fontSize: type.label, flexShrink: 0 }}
+            />
+            <Typography.Text
+              ellipsis
+              style={{ color: colors.onBrand, fontSize: type.label, minWidth: 0 }}
+            >
+              Ca #{currentShift.id} &mdash; {currentShift.cashier_name}
+            </Typography.Text>
+            <Button
+              size="small"
+              icon={<SwapOutlined />}
+              onClick={() => {
+                closeForm.resetFields();
+                setCloseModal(true);
+              }}
+              style={{
+                borderColor: colors.onBrandBorder,
+                color: colors.onBrand,
+                background: colors.onBrandActiveBg,
+                borderRadius: radius.sm,
+                flexShrink: 0,
+              }}
+            >
+              Thay ca
+            </Button>
+          </div>
+        )}
+
         {/* Hành động chính, không phải điều hướng: mở POS ở tab mới nên nó rời
-            khỏi khu quản trị. Trước đây là một mục menu kèm đường kẻ phân tách —
-            đường kẻ đó gánh vai trò mà cỡ chữ và vị trí gánh được. */}
-        <div style={{ padding: `0 ${space.md}px ${space.md}px` }}>
-          <Button
-            type="primary"
-            size="large"
-            block
-            icon={<ShoppingCartOutlined />}
-            onClick={() => window.open('/pos', '_blank')}
-            className="taphoa-primary-action"
-          >
-            {!collapsed && 'Bán hàng'}
-          </Button>
-        </div>
+            khỏi khu quản trị. Không co lại — cùng ưu tiên với nút Thoát. */}
+        <Button
+          type="primary"
+          icon={<ShoppingCartOutlined />}
+          onClick={() => window.open('/pos', '_blank')}
+          className="taphoa-primary-action"
+          style={{ flexShrink: 0 }}
+        >
+          Bán hàng
+        </Button>
 
         {/* User info + logout */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: collapsed ? 'center' : 'space-between',
-            gap: space.sm,
-            padding: space.lg,
-            borderTop: `1px solid ${colors.onBrandBorder}`,
-          }}
-        >
-          {!collapsed && (
-            <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-              <Typography.Text
-                ellipsis
-                style={{ color: colors.onBrand, fontWeight: weight.medium, fontSize: type.label }}
-              >
-                {user?.name}
-              </Typography.Text>
-              {/* onBrandMuted chỉ được đo trên brandGradient (4.55–5.01:1), chưa
-                  từng đo trên colors.sidebar — ở đầu purple600 nó tụt còn
-                  4.30:1, hụt AA. Dùng onBrand đặc, phân biệt với tên bằng
-                  weight thay vì độ mờ. */}
-              <Typography.Text
-                style={{ color: colors.onBrand, fontWeight: weight.regular, fontSize: type.label }}
-              >
-                {user?.role === 'admin' ? 'Quản lý' : 'Nhân viên'}
-              </Typography.Text>
-            </div>
-          )}
+        <div style={{ display: 'flex', alignItems: 'center', gap: space.lg, minWidth: 0 }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'flex-end',
+              minWidth: 0,
+            }}
+          >
+            <Typography.Text
+              ellipsis
+              style={{ color: colors.onBrand, fontWeight: weight.medium, fontSize: type.label }}
+            >
+              {user?.name}
+            </Typography.Text>
+            {/* onBrandMuted đo trên chính brandGradient (4.55–5.01:1, đạt AA) —
+                khác colors.sidebar trước đây, nơi đầu purple600 tụt còn 4.30:1. */}
+            <Typography.Text style={{ color: colors.onBrandMuted, fontSize: type.label }}>
+              {user?.role === 'admin' ? 'Quản lý' : 'Nhân viên'}
+            </Typography.Text>
+          </div>
           <Button
             type="primary"
             ghost
             icon={<LogoutOutlined />}
             onClick={handleLogout}
-            style={{ color: colors.onBrand, borderColor: colors.onBrandBorder }}
+            style={{ color: colors.onBrand, borderColor: colors.onBrandBorder, flexShrink: 0 }}
           >
-            {!collapsed && 'Thoát'}
+            Thoát
           </Button>
         </div>
-      </Sider>
+      </Header>
 
-      <Layout style={{ background: colors.bg }}>
-        <Header
-          style={{
-            height: 56,
-            background: colors.surface,
-            padding: `0 ${space.xl}px`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            position: 'sticky',
-            top: 0,
-            zIndex: 100,
-            boxShadow: colors.shadowHeader,
-          }}
-        >
-          <Breadcrumbs />
-
-          {/* Ca hiện tại + Thay ca — gắn với phiên làm việc, không phải điều hướng nên ở lại header */}
-          {currentShift && (
-            <div
-              style={{ display: 'flex', alignItems: 'center', gap: space.sm, whiteSpace: 'nowrap' }}
-            >
-              <ClockCircleOutlined style={{ color: colors.textSecondary, fontSize: type.label }} />
-              <Typography.Text style={{ color: colors.textSecondary, fontSize: type.label }}>
-                Ca #{currentShift.id} &mdash; {currentShift.cashier_name}
-              </Typography.Text>
-              <Button
-                size="small"
-                icon={<SwapOutlined />}
-                onClick={() => {
-                  closeForm.resetFields();
-                  setCloseModal(true);
-                }}
-              >
-                Thay ca
-              </Button>
-            </div>
-          )}
-        </Header>
-
-        {/* Trần chứ không phải bề rộng cố định: Sider đã lấy 248px cố định, nên
-            trần cũ 1440 (đặt hồi nav còn nằm ngang và không ăn bề rộng nào) bỏ
-            phí 30% màn hình đích và ép chữ xuống dòng. */}
-        <Content
-          className="taphoa-content"
-          // width 100% là bắt buộc, không thừa: margin ngang 'auto' trên một flex
-          // item sẽ vô hiệu hoá align-items:stretch, khiến cột nội dung co lại
-          // đúng bằng ruột nó khi bảng rỗng.
-          style={{
-            padding: space.xl,
-            width: '100%',
-            maxWidth: layout.contentMax,
-            margin: '0 auto',
-          }}
-        >
-          <ErrorBoundary>
-            <Outlet />
-          </ErrorBoundary>
-        </Content>
-      </Layout>
+      {/* Trần chứ không phải bề rộng cố định: không còn sidebar chiếm chỗ,
+          trần chỉ chặn bảng giãn vô hạn trên màn siêu rộng, nơi mắt phải quét
+          quá xa giữa cột đầu và cột cuối của một dòng. */}
+      <Content
+        className="taphoa-content"
+        // width 100% là bắt buộc, không thừa: margin ngang 'auto' trên một flex
+        // item sẽ vô hiệu hoá align-items:stretch, khiến cột nội dung co lại
+        // đúng bằng ruột nó khi bảng rỗng.
+        style={{
+          padding: space.xl,
+          width: '100%',
+          maxWidth: layout.contentMax,
+          margin: '0 auto',
+        }}
+      >
+        <Breadcrumbs />
+        <ErrorBoundary>
+          <Outlet />
+        </ErrorBoundary>
+      </Content>
 
       {/* Modal bắt buộc mở ca */}
       <Modal
