@@ -13,9 +13,7 @@ const SOURCE_OF_TRUTH = 'theme/colors.ts';
 const ALLOWLIST = [
   'components/chat/ChatInput.tsx',
   'components/chat/ChatMessage.tsx',
-  'pages/CreatePurchaseOrderPage.tsx',
   'pages/LoginPage.css',
-  'pages/POSPage.tsx',
   'pages/ProductsPage.tsx',
 ];
 

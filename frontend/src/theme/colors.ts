@@ -50,6 +50,14 @@ const scale = {
   emerald200: '#bbf7d0',
   amber400: '#facc15',
   orange500: '#f97316',
+
+  emerald50: '#f0fdf4',
+  green700: '#15803d',
+  green800: '#166534',
+  rose50: '#fef2f2',
+  rose200: '#fecaca',
+  rose800: '#991b1b',
+  red600: '#dc2626',
 } as const;
 
 export const colors = {
@@ -57,6 +65,8 @@ export const colors = {
   brand: scale.indigo500,
   brandHover: scale.indigo600,
   brandActive: scale.indigo700,
+  /** Sắc thương hiệu sáng hơn, dùng cho hover và viền nhấn (không phải màu nhóm Khách hàng) */
+  brandLight: scale.violet500,
   /** Nền nhạt cho vùng mang màu thương hiệu: header bảng, mục menu đang chọn */
   brandSoft: scale.indigo50,
   brandSoftStrong: scale.indigo100,
@@ -71,6 +81,8 @@ export const colors = {
   onBrandActiveBg: 'rgba(255, 255, 255, 0.18)',
   /** Nền khối biểu tượng (logo) nổi trên gradient thương hiệu */
   onBrandTint: 'rgba(255, 255, 255, 0.2)',
+  /** Lớp phủ hover trên bề mặt sáng (nút nhỏ như đóng tab, không phải trên nền thương hiệu) */
+  hoverTint: 'rgba(0, 0, 0, 0.08)',
 
   /* ---------- Trạng thái hệ thống ---------- */
   success: scale.emerald500,
@@ -100,6 +112,21 @@ export const colors = {
 
   /** Nền vùng tô dưới đường lợi nhuận trên biểu đồ */
   profitSoft: scale.emerald200,
+
+  /** Nền ô thông báo thành công (tiền thừa trả khách) */
+  successSoft: scale.emerald50,
+  /** Chữ nhãn trên successSoft (cỡ chữ nhỏ nên cần xanh đậm nhất để đủ tương phản) */
+  successInk: scale.green800,
+  /** Chữ số tiền trên successSoft (cỡ lớn, đậm nét — vẫn đạt tương phản dù nhạt hơn successInk) */
+  successStrong: scale.green700,
+  /** Nền ô cảnh báo lỗi */
+  dangerSoft: scale.rose50,
+  /** Viền ô cảnh báo lỗi */
+  dangerBorder: scale.rose200,
+  /** Chữ tiêu đề trong ô cảnh báo lỗi */
+  dangerInk: scale.rose800,
+  /** Chữ nội dung (số tiền, chi tiết) trong ô cảnh báo lỗi */
+  dangerStrong: scale.red600,
 
   /* ---------- Huy hiệu xếp hạng (bảng sản phẩm bán chạy) ---------- */
   rankGold: scale.amber400,

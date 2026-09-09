@@ -31,6 +31,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useProducts, useSuppliers, useCreatePurchaseOrder, useCreateSupplier } from '../hooks';
+import { colors } from '../theme/colors';
 import type { ProductWithStock } from '../types';
 import { formatVND, inputNumberFormatter, getErrorMessage } from '../utils/format';
 
@@ -41,23 +42,6 @@ interface OrderItem {
   cost_price: number;
   expiry_date?: string;
 }
-
-const THEME = {
-  primary: '#0d9488',
-  primaryLight: '#14b8a6',
-  primaryDark: '#0f766e',
-  success: '#22c55e',
-  warning: '#f59e0b',
-  error: '#ef4444',
-  gray50: '#f9fafb',
-  gray100: '#f3f4f6',
-  gray200: '#e5e7eb',
-  gray300: '#d1d5db',
-  gray400: '#9ca3af',
-  gray500: '#6b7280',
-  gray600: '#4b5563',
-  white: '#ffffff',
-};
 
 export default function CreatePurchaseOrderPage() {
   const navigate = useNavigate();
@@ -230,17 +214,17 @@ export default function CreatePurchaseOrderPage() {
   }, []);
 
   return (
-    <Layout style={{ height: '100vh', overflow: 'hidden', background: THEME.gray100 }}>
+    <Layout style={{ height: '100vh', overflow: 'hidden', background: colors.surfaceSunken }}>
       {/* Header */}
       <Layout.Header
         style={{
-          background: `linear-gradient(135deg, ${THEME.primaryDark} 0%, ${THEME.primary} 50%, ${THEME.primaryLight} 100%)`,
+          background: `linear-gradient(135deg, ${colors.brandHover} 0%, ${colors.brand} 50%, ${colors.brandLight} 100%)`,
           padding: '0 20px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           height: 56,
-          boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+          boxShadow: colors.shadowHeader,
         }}
       >
         <Space size="middle">
@@ -248,14 +232,14 @@ export default function CreatePurchaseOrderPage() {
             type="text"
             icon={<ArrowLeftOutlined />}
             onClick={() => navigate('/purchase-orders')}
-            style={{ color: THEME.white, width: 44, height: 44, fontSize: 16 }}
+            style={{ color: colors.surface, width: 44, height: 44, fontSize: 16 }}
           />
-          <Typography.Text strong style={{ color: THEME.white, fontSize: 16 }}>
+          <Typography.Text strong style={{ color: colors.surface, fontSize: 16 }}>
             Tạo đơn nhập hàng
           </Typography.Text>
         </Space>
-        <Badge count={items.length} style={{ backgroundColor: THEME.success }}>
-          <Typography.Text style={{ color: THEME.white, fontSize: 14 }}>
+        <Badge count={items.length} style={{ backgroundColor: colors.success }}>
+          <Typography.Text style={{ color: colors.surface, fontSize: 14 }}>
             {items.length} sản phẩm
           </Typography.Text>
         </Badge>
@@ -269,7 +253,7 @@ export default function CreatePurchaseOrderPage() {
             {/* Search / barcode input */}
             <Input
               ref={searchRef}
-              prefix={<SearchOutlined style={{ color: THEME.gray400, fontSize: 18 }} />}
+              prefix={<SearchOutlined style={{ color: colors.textMuted, fontSize: 18 }} />}
               placeholder="Quét barcode hoặc gõ tên sản phẩm..."
               value={search}
               onChange={e => setSearch(e.target.value)}
@@ -297,9 +281,9 @@ export default function CreatePurchaseOrderPage() {
             <Card
               title={
                 <Space>
-                  <MinusCircleOutlined style={{ color: THEME.primary }} />
+                  <MinusCircleOutlined style={{ color: colors.brand }} />
                   <span>Danh sách nhập</span>
-                  <Badge count={items.length} style={{ backgroundColor: THEME.primary }} />
+                  <Badge count={items.length} style={{ backgroundColor: colors.brand }} />
                 </Space>
               }
               style={{
@@ -323,7 +307,7 @@ export default function CreatePurchaseOrderPage() {
                     key={item.product.id}
                     style={{
                       padding: '12px 16px',
-                      borderBottom: `1px solid ${THEME.gray100}`,
+                      borderBottom: `1px solid ${colors.surfaceSunken}`,
                       display: 'flex',
                       alignItems: 'center',
                       gap: 10,
@@ -403,7 +387,7 @@ export default function CreatePurchaseOrderPage() {
                       strong
                       style={{
                         fontSize: 14,
-                        color: THEME.primary,
+                        color: colors.brand,
                         minWidth: 90,
                         textAlign: 'right',
                       }}
@@ -448,7 +432,7 @@ export default function CreatePurchaseOrderPage() {
               {/* Supplier */}
               <div style={{ marginBottom: 12 }}>
                 <Typography.Text style={{ fontSize: 14, marginBottom: 6, display: 'block' }}>
-                  Nhà cung cấp <span style={{ color: THEME.error }}>*</span>
+                  Nhà cung cấp <span style={{ color: colors.danger }}>*</span>
                 </Typography.Text>
                 <Select
                   placeholder="Chọn NCC"
@@ -506,7 +490,7 @@ export default function CreatePurchaseOrderPage() {
 
               <div
                 style={{
-                  background: THEME.primary,
+                  background: colors.brand,
                   borderRadius: 12,
                   padding: '12px 16px',
                   display: 'flex',
@@ -515,10 +499,10 @@ export default function CreatePurchaseOrderPage() {
                   marginBottom: 12,
                 }}
               >
-                <Typography.Text style={{ color: 'rgba(255,255,255,0.85)', fontSize: 14 }}>
+                <Typography.Text style={{ color: colors.onBrandMuted, fontSize: 14 }}>
                   TỔNG TIỀN
                 </Typography.Text>
-                <Typography.Title level={3} style={{ color: THEME.white, margin: 0 }}>
+                <Typography.Title level={3} style={{ color: colors.surface, margin: 0 }}>
                   {formatVND(total)}
                 </Typography.Title>
               </div>
@@ -545,8 +529,8 @@ export default function CreatePurchaseOrderPage() {
               {debtAmount > 0 && (
                 <div
                   style={{
-                    background: '#fef2f2',
-                    border: '1px solid #fecaca',
+                    background: colors.dangerSoft,
+                    border: `1px solid ${colors.dangerBorder}`,
                     borderRadius: 10,
                     padding: '10px 16px',
                     display: 'flex',
@@ -555,10 +539,10 @@ export default function CreatePurchaseOrderPage() {
                     marginBottom: 10,
                   }}
                 >
-                  <Typography.Text style={{ color: '#991b1b', fontSize: 14 }}>
+                  <Typography.Text style={{ color: colors.dangerInk, fontSize: 14 }}>
                     Còn nợ:
                   </Typography.Text>
-                  <Typography.Text strong style={{ color: '#dc2626', fontSize: 20 }}>
+                  <Typography.Text strong style={{ color: colors.dangerStrong, fontSize: 20 }}>
                     {formatVND(debtAmount)}
                   </Typography.Text>
                 </div>
@@ -580,7 +564,7 @@ export default function CreatePurchaseOrderPage() {
                   fontSize: 18,
                   fontWeight: 700,
                   borderRadius: 14,
-                  background: supplierId && items.length > 0 ? THEME.primary : undefined,
+                  background: supplierId && items.length > 0 ? colors.brand : undefined,
                   border: 'none',
                 }}
               >
@@ -595,7 +579,7 @@ export default function CreatePurchaseOrderPage() {
       <Modal
         title={
           <Space>
-            <SearchOutlined style={{ color: THEME.primary }} />
+            <SearchOutlined style={{ color: colors.brand }} />
             <span>Chọn sản phẩm</span>
           </Space>
         }
@@ -607,7 +591,7 @@ export default function CreatePurchaseOrderPage() {
       >
         <Input
           ref={modalSearchRef}
-          prefix={<SearchOutlined style={{ color: THEME.gray400 }} />}
+          prefix={<SearchOutlined style={{ color: colors.textMuted }} />}
           placeholder="Tìm tên, SKU, barcode..."
           value={modalSearch}
           onChange={e => setModalSearch(e.target.value)}
@@ -640,7 +624,7 @@ export default function CreatePurchaseOrderPage() {
                     style={{
                       borderRadius: 10,
                       cursor: 'pointer',
-                      borderColor: inOrder ? THEME.primary : undefined,
+                      borderColor: inOrder ? colors.brand : undefined,
                       borderWidth: inOrder ? 2 : 1,
                     }}
                   >
@@ -654,7 +638,7 @@ export default function CreatePurchaseOrderPage() {
                       <Badge
                         count={inOrder.quantity}
                         style={{
-                          backgroundColor: THEME.primary,
+                          backgroundColor: colors.brand,
                           position: 'absolute',
                           top: 8,
                           right: 8,
