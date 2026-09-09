@@ -64,7 +64,14 @@ func main() {
 	// CORS — cho phép frontend origins (local + tunnel)
 	frontendURL := os.Getenv("FRONTEND_URL")
 	if frontendURL != "" {
-		allowedOrigins := []string{frontendURL, "http://localhost:3000", "http://localhost:3001"}
+		// FRONTEND_URL nhận nhiều origin cách nhau bằng dấu phẩy, để mở app bằng
+		// localhost hay qua tunnel đều đăng nhập được mà không phải khởi động lại backend.
+		allowedOrigins := []string{"http://localhost:3000", "http://localhost:3001"}
+		for _, origin := range strings.Split(frontendURL, ",") {
+			if origin = strings.TrimSpace(origin); origin != "" {
+				allowedOrigins = append(allowedOrigins, origin)
+			}
+		}
 		r.Use(cors.New(cors.Config{
 			AllowOrigins:     allowedOrigins,
 			AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
