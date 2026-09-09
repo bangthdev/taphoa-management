@@ -56,7 +56,7 @@ export const space = {
  * mà vẫn còn là trần, không phải bề rộng cố định.
  */
 export const layout = {
-  contentMax: 1920,
+  contentMax: 1910,
 } as const;
 
 export const radius = {
