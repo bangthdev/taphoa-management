@@ -11,15 +11,10 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 )
 
-// Secret key đọc từ env, fallback cho dev
 var jwtSecret = func() []byte {
 	secret := os.Getenv("JWT_SECRET")
 	if secret == "" {
-		if os.Getenv("GIN_MODE") == "release" {
-			log.Fatal("FATAL: JWT_SECRET is required in production")
-		}
-		log.Println("WARNING: JWT_SECRET not set, using dev secret")
-		secret = "taphoa-dev-secret-do-not-use-in-production"
+		log.Fatal("FATAL: JWT_SECRET is required in production")
 	}
 	return []byte(secret)
 }()
