@@ -37,6 +37,7 @@ import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 import { APP_NAME } from '../constants';
 import { useAuth } from '../contexts/useAuth';
 import { useCurrentShift, useOpenShift, useCloseShift } from '../hooks';
+import { colors } from '../theme/colors';
 import type { Shift } from '../types';
 import { formatVND, inputNumberFormatter, getErrorMessage } from '../utils/format';
 
@@ -215,7 +216,7 @@ export default function AppLayout() {
       <Header
         style={{
           padding: '0 24px',
-          background: 'linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #14b8a6 100%)',
+          background: colors.brandGradient,
           display: 'flex',
           alignItems: 'center',
           gap: 24,
@@ -231,14 +232,14 @@ export default function AppLayout() {
             style={{
               width: 36,
               height: 36,
-              background: 'rgba(255,255,255,0.2)',
+              background: colors.onBrandTint,
               borderRadius: 10,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               fontSize: 20,
               fontWeight: 'bold',
-              color: '#fff',
+              color: colors.onBrand,
             }}
           >
             F
@@ -246,7 +247,7 @@ export default function AppLayout() {
           <Typography.Title
             level={4}
             style={{
-              color: '#fff',
+              color: colors.onBrand,
               margin: 0,
               whiteSpace: 'nowrap',
               fontWeight: 600,
@@ -284,8 +285,8 @@ export default function AppLayout() {
         {/* Shift info + Thay ca */}
         {currentShift && (
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, whiteSpace: 'nowrap' }}>
-            <ClockCircleOutlined style={{ color: 'rgba(255,255,255,0.7)', fontSize: 14 }} />
-            <Typography.Text style={{ color: '#fff', fontSize: 13 }}>
+            <ClockCircleOutlined style={{ color: colors.onBrandMuted, fontSize: 14 }} />
+            <Typography.Text style={{ color: colors.onBrand, fontSize: 13 }}>
               Ca #{currentShift.id} &mdash; {currentShift.cashier_name}
             </Typography.Text>
             <Button
@@ -296,9 +297,9 @@ export default function AppLayout() {
                 setCloseModal(true);
               }}
               style={{
-                borderColor: 'rgba(255,255,255,0.3)',
-                color: '#fff',
-                background: 'rgba(255,255,255,0.1)',
+                borderColor: colors.onBrandBorder,
+                color: colors.onBrand,
+                background: colors.onBrandActiveBg,
                 borderRadius: 6,
               }}
             >
@@ -310,10 +311,10 @@ export default function AppLayout() {
         {/* User info + logout */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 16, whiteSpace: 'nowrap' }}>
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end' }}>
-            <Typography.Text style={{ color: '#fff', fontWeight: 500, fontSize: 14 }}>
+            <Typography.Text style={{ color: colors.onBrand, fontWeight: 500, fontSize: 14 }}>
               {user?.name}
             </Typography.Text>
-            <Typography.Text style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12 }}>
+            <Typography.Text style={{ color: colors.onBrandMuted, fontSize: 12 }}>
               {user?.role === 'admin' ? 'Quản lý' : 'Nhân viên'}
             </Typography.Text>
           </div>
@@ -323,8 +324,8 @@ export default function AppLayout() {
             icon={<LogoutOutlined />}
             onClick={handleLogout}
             style={{
-              color: '#fff',
-              borderColor: 'rgba(255,255,255,0.3)',
+              color: colors.onBrand,
+              borderColor: colors.onBrandBorder,
               borderRadius: 8,
             }}
           >

@@ -65,6 +65,8 @@ export const colors = {
   onBrandMuted: 'rgba(255, 255, 255, 0.72)',
   onBrandBorder: 'rgba(255, 255, 255, 0.28)',
   onBrandActiveBg: 'rgba(255, 255, 255, 0.18)',
+  /** Nền khối biểu tượng (logo) nổi trên gradient thương hiệu */
+  onBrandTint: 'rgba(255, 255, 255, 0.2)',
 
   /* ---------- Trạng thái hệ thống ---------- */
   success: scale.emerald500,
