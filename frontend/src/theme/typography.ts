@@ -57,6 +57,12 @@ export const space = {
  */
 export const layout = {
   contentMax: 1800,
+  /**
+   * Chiều cao mục điều hướng ngang. Phải sống ở đây chứ không phải trong theme
+   * antd, vì CSS cũng cần nó: antd vẽ nền lên chính thẻ `li`, mà `li` là flex
+   * item bị kéo giãn theo chiều cao của thanh — `line-height` không chặn được.
+   */
+  navItemHeight: 34,
 } as const;
 
 export const radius = {

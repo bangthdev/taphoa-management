@@ -9,7 +9,7 @@ import AppLayout from './components/AppLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './contexts/AuthProvider';
 import { colors } from './theme/colors';
-import { type, radius, fontFamily } from './theme/typography';
+import { type, radius, layout, fontFamily } from './theme/typography';
 
 // 🚀 Lazy loading các pages để giảm bundle size ban đầu
 const LoginPage = React.lazy(() => import('./pages/LoginPage'));
@@ -46,11 +46,6 @@ const queryClient = new QueryClient({
 });
 
 const CONTROL_HEIGHT = 40;
-
-// Chip điều hướng thấp hơn một control thật: nó không phải chỗ để gõ hay bấm
-// mạnh, chỉ là một cái nhãn có nền. Đây là con số duy nhất cần đổi nếu muốn
-// thanh điều hướng cao hoặc thấp hơn.
-const NAV_ITEM_HEIGHT = 34;
 
 const theme = {
   token: {
@@ -132,7 +127,7 @@ const theme = {
       // antd suy chiều cao mục ngang = controlHeightLG * 1.15, ra 57.5px trên
       // một thanh cao 64px — chip chiếm gần trọn chiều cao thanh. Ghim bằng
       // chiều cao control để nó là một chip nằm TRONG thanh, không phải chính thanh.
-      horizontalLineHeight: `${NAV_ITEM_HEIGHT}px`,
+      horizontalLineHeight: `${layout.navItemHeight}px`,
       // antd suy iconSize từ fontSize và itemHeight từ controlHeightLG, nên icon
       // điều hướng bị neo vào cỡ chữ thân bài và trông nhỏ hơn hẳn nhãn cạnh nó.
       // Đặt tường minh để icon và chữ cùng lớn lên khi thang chữ đổi.

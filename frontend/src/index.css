@@ -183,3 +183,20 @@ html {
   overflow: visible;
   text-overflow: clip;
 }
+
+/* antd vẽ nền mục điều hướng lên chính thẻ `li`, và `ul` của menu ngang là
+   flex container (.ant-menu-overflow). Mặc định align-items:stretch kéo mọi
+   `li` cao bằng thanh, nên đổi line-height không có tác dụng — phải chặn giãn
+   rồi ghim chiều cao. */
+.ant-menu-horizontal.ant-menu-overflow {
+  align-items: center;
+}
+
+.ant-menu-horizontal > .ant-menu-overflow-item,
+.ant-menu-horizontal > .ant-menu-item,
+.ant-menu-horizontal > .ant-menu-submenu {
+  display: inline-flex;
+  align-items: center;
+  height: var(--t-layout-nav-item-height);
+  line-height: var(--t-layout-nav-item-height);
+}
