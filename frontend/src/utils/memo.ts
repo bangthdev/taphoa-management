@@ -25,7 +25,7 @@ export function memoEqual<T extends Record<string, unknown>>(
  * Dùng cho: Object config, style object truyền vào child components
  *
  * @example
- * const style = useStableObject({ color: 'red', fontSize: 14 });
+ * const style = useStableObject({ color: 'red', fontSize: type.body });
  * // style chỉ thay đổi khi giá trị thực sự khác
  */
 export function useStableObject<T extends Record<string, unknown>>(obj: T): T {

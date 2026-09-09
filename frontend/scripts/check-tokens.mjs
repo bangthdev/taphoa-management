@@ -32,7 +32,6 @@ const SIZING_ALLOWLIST = new Set([
   'pages/ProductsPage.tsx',
   'pages/ReportsPage.tsx',
   'styles/common.ts',
-  'utils/memo.ts',
 ]);
 
 const RULES = [
