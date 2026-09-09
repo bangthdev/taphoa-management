@@ -37,7 +37,7 @@ import { APP_NAME } from '../constants';
 import { useAuth } from '../contexts/useAuth';
 import { useCurrentShift, useOpenShift, useCloseShift } from '../hooks';
 import { colors } from '../theme/colors';
-import { type, weight, radius, space } from '../theme/typography';
+import { type, weight, radius, space, layout } from '../theme/typography';
 import type { Shift } from '../types';
 import { formatVND, inputNumberFormatter, getErrorMessage } from '../utils/format';
 
@@ -385,12 +385,12 @@ export default function AppLayout() {
           )}
         </Header>
 
-        {/* Cột nội dung cũ có maxWidth 1440 + margin auto để bảng không giãn
-            quá rộng trên màn lớn — giữ lại làm trần, không phải bề rộng cố
-            định, vì Sider giờ đã chiếm 248px cố định bên trái. */}
+        {/* Trần chứ không phải bề rộng cố định: Sider đã lấy 248px cố định, nên
+            trần cũ 1440 (đặt hồi nav còn nằm ngang và không ăn bề rộng nào) bỏ
+            phí 30% màn hình đích và ép chữ xuống dòng. */}
         <Content
           className="taphoa-content"
-          style={{ padding: space.xl, maxWidth: 1440, margin: '0 auto' }}
+          style={{ padding: space.xl, maxWidth: layout.contentMax, margin: '0 auto' }}
         >
           <ErrorBoundary>
             <Outlet />

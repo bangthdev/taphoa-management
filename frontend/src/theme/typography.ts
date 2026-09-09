@@ -49,6 +49,16 @@ export const space = {
   xxxl: 48,
 } as const;
 
+/**
+ * Trần bề rộng cột nội dung. KHÔNG phải bề rộng cố định — nó chỉ chặn bảng
+ * giãn vô hạn trên màn siêu rộng, nơi mắt phải quét quá xa giữa cột đầu và cột
+ * cuối của một dòng. 1920 đo cho màn đích 27 inch (~2340px trừ 248px sidebar
+ * và đệm hai bên còn ~2046px), nên gần như dùng hết màn mà vẫn còn là trần.
+ */
+export const layout = {
+  contentMax: 1920,
+} as const;
+
 export const radius = {
   /** Tag, chip, ô nhỏ */
   sm: 6,
@@ -65,7 +75,7 @@ export const radius = {
 export const fontFamily =
   '"Be Vietnam Pro", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
 
-const groups = { type, weight, space, radius } as const;
+const groups = { type, weight, space, radius, layout } as const;
 
 /** `type.metric` → `--t-type-metric` */
 function toCssVarName(group: string, token: string): string {
