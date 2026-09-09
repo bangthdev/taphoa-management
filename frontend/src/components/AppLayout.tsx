@@ -97,9 +97,8 @@ function getMenuItems(role?: string): MenuProps['items'] {
     items.push({ key: '/reports', icon: <BarChartOutlined />, label: 'Báo cáo' });
   }
 
-  items.push({ type: 'divider' as const });
-  items.push({ key: '/pos', icon: <ShoppingCartOutlined />, label: 'Bán hàng' });
-
+  // "Bán hàng" KHÔNG nằm trong menu: nó là hành động chính và mở tab mới, chứ
+  // không phải một trang để xem. Nó được dựng thành nút riêng ở đáy sidebar.
   return items;
 }
 
@@ -286,10 +285,6 @@ export default function AppLayout() {
           items={menuItems}
           onClick={({ key }) => {
             if (!key.startsWith('/')) return;
-            if (key === '/pos') {
-              window.open(key, '_blank');
-              return;
-            }
             navigate(key);
           }}
           // minHeight: 0 bắt buộc để flex item này co lại và tự cuộn thay vì
@@ -302,6 +297,22 @@ export default function AppLayout() {
             borderInlineEnd: 'none',
           }}
         />
+
+        {/* Hành động chính, không phải điều hướng: mở POS ở tab mới nên nó rời
+            khỏi khu quản trị. Trước đây là một mục menu kèm đường kẻ phân tách —
+            đường kẻ đó gánh vai trò mà cỡ chữ và vị trí gánh được. */}
+        <div style={{ padding: `0 ${space.md}px ${space.md}px` }}>
+          <Button
+            type="primary"
+            size="large"
+            block
+            icon={<ShoppingCartOutlined />}
+            onClick={() => window.open('/pos', '_blank')}
+            style={{ background: colors.brandGradient, border: 'none' }}
+          >
+            {!collapsed && 'Bán hàng'}
+          </Button>
+        </div>
 
         {/* User info + logout */}
         <div
