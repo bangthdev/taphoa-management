@@ -3,7 +3,6 @@ import { Breadcrumb } from 'antd';
 import { memo, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-
 // Mapping route → label
 const routeLabels: Record<string, string> = {
   '/': 'Tổng quan',

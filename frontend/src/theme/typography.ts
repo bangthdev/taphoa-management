@@ -25,9 +25,9 @@ export const type = {
   /** Tiêu đề trang. */
   title: 30,
   /** Số liệu KPI ở trang Tổng quan. */
-  metric: 40,
+  metric: 38,
   /** Con số quan trọng nhất một màn hình có: THÀNH TIỀN ở màn bán hàng. */
-  hero: 54,
+  hero: 46,
 } as const;
 
 export const weight = {
@@ -53,7 +53,7 @@ export const space = {
  * Trần bề rộng cột nội dung. KHÔNG phải bề rộng cố định — nó chỉ chặn bảng
  * giãn vô hạn trên màn siêu rộng, nơi mắt phải quét quá xa giữa cột đầu và cột
  * cuối của một dòng. 1920 đo cho màn đích 27 inch (~2340px trừ 248px sidebar
- * và đệm hai bên còn ~2046px), nên gần như dùng hết màn mà vẫn còn là trần.
+ * mà vẫn còn là trần, không phải bề rộng cố định.
  */
 export const layout = {
   contentMax: 1920,
