@@ -114,6 +114,11 @@ const theme = {
       // (token darkSubMenuItemBg) — phá gradient sidebar. Đặt trong suốt
       // để lộ nền Sider.
       darkSubMenuItemBg: 'transparent',
+      // antd suy iconSize từ fontSize và itemHeight từ controlHeightLG, nên icon
+      // điều hướng bị neo vào cỡ chữ thân bài và trông nhỏ hơn hẳn nhãn cạnh nó.
+      // Đặt tường minh để icon và chữ cùng lớn lên khi thang chữ đổi.
+      iconSize: type.lead,
+      collapsedIconSize: type.title,
     },
     Table: {
       borderRadius: radius.md,

@@ -7,22 +7,27 @@
  */
 
 /**
- * Sáu bậc, tỉ lệ khoảng 1.28. Trước đây giao diện dùng 12 cỡ rời rạc, tức là
- * không có thang — mắt không đọc ra thứ bậc khi mọi thứ chênh nhau 1-2px.
+ * Sáu bậc, tỉ lệ 1.28 nới dần lên 1.35 ở hai bậc cuối. Trước đây giao diện dùng
+ * 12 cỡ rời rạc, tức là không có thang — mắt không đọc ra thứ bậc khi mọi thứ
+ * chênh nhau 1-2px.
+ *
+ * Thang được chỉnh cho màn hình đích: desktop 27 inch, viewport ~2340px, ngồi
+ * cách ~70cm. Ở khoảng cách đó cùng một cỡ chữ trông nhỏ hơn ~20% so với laptop
+ * ngồi cách 50cm, nên thang này lớn hơn thang cho laptop đúng chừng ấy.
  */
 export const type = {
   /** Nhãn KPI, header bảng. Đi kèm chữ hoa và giãn ký tự, không đi một mình. */
-  label: 13,
+  label: 14,
   /** Thân bài, ô nhập, nội dung bảng. 16px là ngưỡng chữ thân bài của web. */
-  body: 16,
+  body: 18,
   /** Tiêu đề card, dòng nhấn trong danh sách. */
-  lead: 20,
+  lead: 23,
   /** Tiêu đề trang. */
-  title: 26,
+  title: 30,
   /** Số liệu KPI ở trang Tổng quan. */
-  metric: 34,
+  metric: 40,
   /** Con số quan trọng nhất một màn hình có: THÀNH TIỀN ở màn bán hàng. */
-  hero: 44,
+  hero: 54,
 } as const;
 
 export const weight = {
