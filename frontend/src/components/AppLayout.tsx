@@ -390,7 +390,15 @@ export default function AppLayout() {
             phí 30% màn hình đích và ép chữ xuống dòng. */}
         <Content
           className="taphoa-content"
-          style={{ padding: space.xl, maxWidth: layout.contentMax, margin: '0 auto' }}
+          // width 100% là bắt buộc, không thừa: margin ngang 'auto' trên một flex
+          // item sẽ vô hiệu hoá align-items:stretch, khiến cột nội dung co lại
+          // đúng bằng ruột nó khi bảng rỗng.
+          style={{
+            padding: space.xl,
+            width: '100%',
+            maxWidth: layout.contentMax,
+            margin: '0 auto',
+          }}
         >
           <ErrorBoundary>
             <Outlet />
