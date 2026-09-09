@@ -14,7 +14,14 @@ export default function DebtsPage() {
 
   const columns = [
     { title: 'Tên', dataIndex: 'name' },
-    { title: 'SĐT', dataIndex: 'phone', width: 130 },
+    // Số điện thoại là giá trị nguyên khối, ngắt dòng giữa chừng là đọc sai.
+    // nowrap giữ nó liền mạch kể cả khi thang chữ đổi; width chỉ là chỗ chứa.
+    {
+      title: 'SĐT',
+      dataIndex: 'phone',
+      width: 170,
+      onCell: () => ({ style: { whiteSpace: 'nowrap' as const } }),
+    },
     {
       title: 'Tổng nợ',
       dataIndex: 'total_debt',
