@@ -45,6 +45,10 @@ const queryClient = new QueryClient({
   },
 });
 
+// Chiều cao chuẩn của một control. Chip điều hướng dùng chung giá trị này để
+// nó cao bằng input và nút, thay vì bằng cả thanh header.
+const CONTROL_HEIGHT = 40;
+
 const theme = {
   token: {
     // Màu chính - Thương hiệu
@@ -70,7 +74,7 @@ const theme = {
     borderRadiusLG: radius.lg, // Bo góc lớn hơn cho card/modal
 
     // Kích thước
-    controlHeight: 40, // Chiều cao input/button
+    controlHeight: CONTROL_HEIGHT,
 
     // Thang chữ đọc từ theme/typography.ts — sáu bậc cố định, không co giãn
     // theo viewport, để cỡ chữ ổn định giữa các màn hình tác nghiệp.
@@ -124,6 +128,10 @@ const theme = {
       horizontalItemHoverColor: colors.onBrand,
       // Bỏ gạch chân mặc định: chip trượt đã gánh vai trò chỉ mục đang chọn.
       activeBarHeight: 0,
+      // antd suy chiều cao mục ngang = controlHeightLG * 1.15, ra 57.5px trên
+      // một thanh cao 64px — chip chiếm gần trọn chiều cao thanh. Ghim bằng
+      // chiều cao control để nó là một chip nằm TRONG thanh, không phải chính thanh.
+      horizontalLineHeight: `${CONTROL_HEIGHT}px`,
       // antd suy iconSize từ fontSize và itemHeight từ controlHeightLG, nên icon
       // điều hướng bị neo vào cỡ chữ thân bài và trông nhỏ hơn hẳn nhãn cạnh nó.
       // Đặt tường minh để icon và chữ cùng lớn lên khi thang chữ đổi.
