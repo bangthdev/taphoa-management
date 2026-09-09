@@ -3,7 +3,6 @@ import { Breadcrumb } from 'antd';
 import { memo, useMemo } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
-import { breadcrumbContainer } from '../../styles/common';
 
 // Mapping route → label
 const routeLabels: Record<string, string> = {
@@ -144,7 +143,7 @@ export const Breadcrumbs: React.FC = memo(function Breadcrumbs() {
   }
 
   return (
-    <div style={breadcrumbContainer}>
+    <div>
       <Breadcrumb items={breadcrumbItems} />
     </div>
   );

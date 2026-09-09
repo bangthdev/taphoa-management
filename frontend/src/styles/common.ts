@@ -212,12 +212,6 @@ export const padding24: CSSProperties = {
   padding: 24,
 };
 
-// Breadcrumb styles
-export const breadcrumbContainer: CSSProperties = {
-  marginBottom: 16,
-  padding: '8px 0',
-};
-
 // Responsive helpers
 export const responsiveGrid: CSSProperties = {
   display: 'grid',
