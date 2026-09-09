@@ -218,7 +218,7 @@ export default function CreatePurchaseOrderPage() {
       {/* Header */}
       <Layout.Header
         style={{
-          background: `linear-gradient(135deg, ${colors.brandHover} 0%, ${colors.brand} 50%, ${colors.brandLight} 100%)`,
+          background: colors.brandGradient,
           padding: '0 20px',
           display: 'flex',
           alignItems: 'center',
@@ -232,14 +232,14 @@ export default function CreatePurchaseOrderPage() {
             type="text"
             icon={<ArrowLeftOutlined />}
             onClick={() => navigate('/purchase-orders')}
-            style={{ color: colors.surface, width: 44, height: 44, fontSize: 16 }}
+            style={{ color: colors.onBrand, width: 44, height: 44, fontSize: 16 }}
           />
-          <Typography.Text strong style={{ color: colors.surface, fontSize: 16 }}>
+          <Typography.Text strong style={{ color: colors.onBrand, fontSize: 16 }}>
             Tạo đơn nhập hàng
           </Typography.Text>
         </Space>
         <Badge count={items.length} style={{ backgroundColor: colors.success }}>
-          <Typography.Text style={{ color: colors.surface, fontSize: 14 }}>
+          <Typography.Text style={{ color: colors.onBrand, fontSize: 14 }}>
             {items.length} sản phẩm
           </Typography.Text>
         </Badge>
@@ -502,7 +502,7 @@ export default function CreatePurchaseOrderPage() {
                 <Typography.Text style={{ color: colors.onBrandMuted, fontSize: 14 }}>
                   TỔNG TIỀN
                 </Typography.Text>
-                <Typography.Title level={3} style={{ color: colors.surface, margin: 0 }}>
+                <Typography.Title level={3} style={{ color: colors.onBrand, margin: 0 }}>
                   {formatVND(total)}
                 </Typography.Title>
               </div>

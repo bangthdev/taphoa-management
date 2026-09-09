@@ -65,7 +65,7 @@ const tabStyle = (isActive: boolean): React.CSSProperties => ({
   fontSize: 15,
   fontWeight: isActive ? 600 : 400,
   background: isActive ? colors.brand : colors.surface,
-  color: isActive ? colors.surface : colors.textSecondary,
+  color: isActive ? colors.onBrand : colors.textSecondary,
   border: `2px solid ${isActive ? colors.brand : colors.borderStrong}`,
   display: 'inline-flex',
   alignItems: 'center',
@@ -74,6 +74,14 @@ const tabStyle = (isActive: boolean): React.CSSProperties => ({
   whiteSpace: 'nowrap',
   transition: 'all 0.15s',
 });
+
+/** antd Tag mặc định inline-block, icon và chữ nằm trên baseline — ép flex để
+ * hai thứ luôn thẳng hàng, kể cả khi cỡ chữ bị override. */
+const statusTagStyle: React.CSSProperties = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 4,
+};
 
 export default function POSPage() {
   const navigate = useNavigate();
@@ -387,7 +395,7 @@ export default function POSPage() {
       {/* Header */}
       <Layout.Header
         style={{
-          background: `linear-gradient(135deg, ${colors.brandHover} 0%, ${colors.brand} 50%, ${colors.brandLight} 100%)`,
+          background: colors.brandGradient,
           padding: '0 20px',
           display: 'flex',
           alignItems: 'center',
@@ -401,23 +409,40 @@ export default function POSPage() {
             type="text"
             icon={<ArrowLeftOutlined />}
             onClick={() => navigate('/')}
-            style={{ color: colors.surface, width: 44, height: 44, fontSize: 16 }}
+            style={{ color: colors.onBrand, width: 44, height: 44, fontSize: 16 }}
           />
-          <Typography.Text strong style={{ color: colors.surface, fontSize: 16 }}>
+          <Typography.Text strong style={{ color: colors.onBrand, fontSize: 16 }}>
             Bán hàng
           </Typography.Text>
         </Space>
         <Space size="middle">
           {currentShift ? (
-            <Tag icon={<ClockCircleOutlined />} color="success" style={{ fontSize: 13 }}>
+            <Tag
+              icon={<ClockCircleOutlined />}
+              style={{
+                ...statusTagStyle,
+                background: colors.successSoft,
+                border: `1px solid ${colors.profitSoft}`,
+                color: colors.successInk,
+                fontSize: 13,
+              }}
+            >
               Ca #{currentShift.id}
             </Tag>
           ) : (
-            <Tag color="error" style={{ fontSize: 13 }}>
+            <Tag
+              style={{
+                ...statusTagStyle,
+                background: colors.dangerSoft,
+                border: `1px solid ${colors.dangerBorder}`,
+                color: colors.dangerInk,
+                fontSize: 13,
+              }}
+            >
               Chưa mở ca
             </Tag>
           )}
-          <Typography.Text style={{ color: colors.surface, fontSize: 13 }}>
+          <Typography.Text style={{ color: colors.onBrand, fontSize: 13 }}>
             {user?.name}
           </Typography.Text>
         </Space>
@@ -445,7 +470,7 @@ export default function POSPage() {
                   count={order.items.length}
                   style={{
                     backgroundColor: isActive ? colors.surface : colors.brand,
-                    color: isActive ? colors.brand : colors.surface,
+                    color: isActive ? colors.brand : colors.onBrand,
                   }}
                 />
               )}
@@ -847,7 +872,7 @@ export default function POSPage() {
                 <Typography.Text style={{ color: colors.onBrandMuted, fontSize: 14 }}>
                   THÀNH TIỀN
                 </Typography.Text>
-                <Typography.Title level={3} style={{ color: colors.surface, margin: 0 }}>
+                <Typography.Title level={3} style={{ color: colors.onBrand, margin: 0 }}>
                   {formatVND(finalTotal)}
                 </Typography.Title>
               </div>
