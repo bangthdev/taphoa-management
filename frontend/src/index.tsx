@@ -4,6 +4,10 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { injectColorVariables } from './theme/colors';
+
+// Phải chạy trước lần render đầu, để CSS có sẵn biến --c-* khi khung hình đầu tiên vẽ.
+injectColorVariables();
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
