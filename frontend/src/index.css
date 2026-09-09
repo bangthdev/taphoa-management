@@ -160,25 +160,3 @@ html {
   color: var(--c-brand-active);
 }
 
-/* Chip chỉ mục điều hướng đang chọn. Nó là MỘT phần tử dùng chung trượt giữa các
-   mục, không phải nền riêng của từng mục: nền riêng chỉ mờ dần chứ không chạy
-   được từ chỗ này sang chỗ kia. */
-.taphoa-nav-pill {
-  position: absolute;
-  top: 0;
-  border-radius: var(--t-radius-md);
-  background: var(--c-brand-active);
-  pointer-events: none;
-  transition:
-    transform 260ms cubic-bezier(0.16, 1, 0.3, 1),
-    width 260ms cubic-bezier(0.16, 1, 0.3, 1),
-    opacity 160ms ease;
-}
-
-/* Chuyển động là trang trí, không mang thông tin — ai tắt hiệu ứng thì chip vẫn
-   nhảy tới đúng chỗ, chỉ không trượt. */
-@media (prefers-reduced-motion: reduce) {
-  .taphoa-nav-pill {
-    transition: opacity 160ms ease;
-  }
-}

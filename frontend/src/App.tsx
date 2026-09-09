@@ -121,11 +121,9 @@ const theme = {
       // (token darkSubMenuItemBg) — phá gradient sidebar. Đặt trong suốt
       // để lộ nền Sider.
       darkSubMenuItemBg: 'transparent',
-      // Menu ngang: mục là chip bo góc, và nền của mục đang chọn để TRONG SUỐT
-      // vì phần nền đó do một phần tử trượt dùng chung vẽ (xem AppLayout) —
-      // để cả hai cùng vẽ thì lúc chuyển mục sẽ thấy hai mảng màu chồng nhau.
+      // Menu ngang: mục là chip bo góc, mục đang chọn tô nền đậm hơn nền thanh.
       horizontalItemBorderRadius: radius.md,
-      horizontalItemSelectedBg: 'transparent',
+      horizontalItemSelectedBg: colors.brandActive,
       horizontalItemHoverBg: colors.onBrandTint,
       horizontalItemSelectedColor: colors.onBrand,
       horizontalItemHoverColor: colors.onBrand,
