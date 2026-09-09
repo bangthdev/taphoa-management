@@ -390,8 +390,10 @@ export default function CreatePurchaseOrderPage() {
                         placeholder="HSD"
                         size="small"
                         style={{ width: 120 }}
-                        onChange={(_, dateStr) =>
-                          updateItem(item.product.id, { expiry_date: dateStr as string })
+                        onChange={date =>
+                          updateItem(item.product.id, {
+                            expiry_date: date ? date.toISOString() : undefined,
+                          })
                         }
                       />
                     )}
