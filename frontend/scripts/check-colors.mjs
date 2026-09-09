@@ -19,7 +19,6 @@ const ALLOWLIST = [
   'pages/POSPage.tsx',
   'pages/ProductsPage.tsx',
   'pages/ReportsPage.tsx',
-  'styles/common.ts',
 ];
 
 const HEX = /#[0-9a-fA-F]{3,8}\b/g;

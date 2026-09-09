@@ -5,6 +5,8 @@
 
 import type { CSSProperties } from 'react';
 
+import { colors } from '../theme/colors';
+
 // Flex layouts
 export const flexCenter: CSSProperties = {
   display: 'flex',
@@ -55,7 +57,7 @@ export const pageTitleStyle: CSSProperties = {
 };
 
 export const contentCard: CSSProperties = {
-  background: '#fff',
+  background: colors.surface,
   borderRadius: 8,
   padding: 24,
 };
@@ -82,11 +84,11 @@ export const modalFormGrid3: CSSProperties = {
 // POS specific styles
 export const posContainer: CSSProperties = {
   minHeight: '100vh',
-  background: '#f5f5f5',
+  background: colors.bg,
 };
 
 export const posHeader: CSSProperties = {
-  background: '#001529',
+  background: colors.brandInk,
   padding: '0 16px',
   display: 'flex',
   alignItems: 'center',
@@ -96,9 +98,9 @@ export const posHeader: CSSProperties = {
 };
 
 export const posTabBar: CSSProperties = {
-  background: '#fff',
+  background: colors.surface,
   padding: '8px 16px',
-  borderBottom: '1px solid #e8e8e8',
+  borderBottom: `1px solid ${colors.border}`,
   display: 'flex',
   alignItems: 'center',
   gap: 8,
@@ -152,7 +154,7 @@ export const emptyStateContainer: CSSProperties = {
 
 export const emptyStateIcon: CSSProperties = {
   fontSize: 64,
-  color: '#d9d9d9',
+  color: colors.borderStrong,
   marginBottom: 16,
 };
 
@@ -240,13 +242,12 @@ export const cardHover: CSSProperties = {
   cursor: 'pointer',
 };
 
-// Status colors (for reference, use with Ant Design Tag)
 export const statusColors = {
-  success: '#52c41a',
-  warning: '#faad14',
-  error: '#f5222d',
-  info: '#1890ff',
-  default: '#d9d9d9',
+  success: colors.success,
+  warning: colors.warning,
+  error: colors.danger,
+  info: colors.info,
+  default: colors.borderStrong,
 } as const;
 
 // Z-index layers
