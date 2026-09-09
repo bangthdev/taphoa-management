@@ -79,6 +79,7 @@ export default function ChatInput({ isLoading, onSend }: Props) {
           onChange={(e) => setText(e.target.value)}
           placeholder="Hỏi gì đó hoặc đính ảnh hóa đơn…"
           autoSize={{ minRows: 1, maxRows: 4 }}
+          className="taphoa-chat-input"
           onPressEnter={(e) => {
             if (!e.shiftKey) {
               e.preventDefault();

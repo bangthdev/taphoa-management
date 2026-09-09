@@ -9,7 +9,7 @@ import ChatInput from './ChatInput';
 import ChatMessage, { type ChatMessageData } from './ChatMessage';
 
 const THREAD_STORAGE_KEY = 'taphoa_chat_thread';
-const PANEL_W = 380;
+const PANEL_W = 440;
 const PANEL_H = 560;
 
 export default function ChatWidget() {
@@ -20,9 +20,12 @@ export default function ChatWidget() {
   const [error, setError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // useStream gọi proxy /agent → langgraph dev :2024; graph "agent" (xem agent/langgraph.json)
+  // useStream gọi proxy /agent → langgraph dev :2024; graph "agent" (xem agent/langgraph.json).
+  // SDK dựng URL bằng `new URL(apiUrl + path)` không kèm base, nên đường dẫn tương đối
+  // sẽ ném "Failed to construct 'URL'". Phải là URL tuyệt đối; lấy theo origin hiện tại
+  // để chạy được cả khi mở qua localhost lẫn qua tunnel.
   const stream = useStream<{ messages: ChatMessageData[] }>({
-    apiUrl: '/agent',
+    apiUrl: `${typeof window !== 'undefined' ? window.location.origin : ''}/agent`,
     assistantId: 'agent',
     messagesKey: 'messages',
     threadId: threadId ?? undefined,
@@ -123,7 +126,8 @@ export default function ChatWidget() {
             position: 'fixed',
             right: 24,
             bottom: 88,
-            width: PANEL_W,
+            // Trên màn hẹp (điện thoại) panel cố định sẽ tràn sát mép hai bên.
+            width: `min(${PANEL_W}px, calc(100vw - 32px))`,
             height: PANEL_H,
             zIndex: 1000,
             boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
