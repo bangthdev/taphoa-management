@@ -9,6 +9,7 @@ import AppLayout from './components/AppLayout';
 import ProtectedRoute from './components/ProtectedRoute';
 import { AuthProvider } from './contexts/AuthProvider';
 import { colors } from './theme/colors';
+import { type, radius, fontFamily } from './theme/typography';
 
 // 🚀 Lazy loading các pages để giảm bundle size ban đầu
 const LoginPage = React.lazy(() => import('./pages/LoginPage'));
@@ -65,62 +66,62 @@ const theme = {
     colorTextDescription: colors.textSecondary,
 
     // Border và radius
-    borderRadius: 10, // Bo góc nhẹ nhàng
-    borderRadiusLG: 12, // Bo góc lớn hơn cho card/modal
+    borderRadius: radius.md, // Bo góc nhẹ nhàng
+    borderRadiusLG: radius.lg, // Bo góc lớn hơn cho card/modal
 
     // Kích thước
     controlHeight: 40, // Chiều cao input/button
 
-    // Thang chữ cố định, bước ~1.2. Giao diện tác nghiệp cần cỡ chữ ổn định
-    // giữa các màn hình, nên không dùng cỡ co giãn theo viewport.
-    fontSize: 16, // Thân bài và bảng dữ liệu — 16px là ngưỡng chữ thân bài của web
-    fontSizeSM: 14, // Nhãn, metadata
-    fontSizeLG: 16, // Tiêu đề card, nội dung nhấn
-    fontSizeHeading4: 24, // Tiêu đề trang
-    fontSizeHeading5: 18,
+    // Thang chữ đọc từ theme/typography.ts — sáu bậc cố định, không co giãn
+    // theo viewport, để cỡ chữ ổn định giữa các màn hình tác nghiệp.
+    fontSize: type.body, // Thân bài và bảng dữ liệu — ngưỡng chữ thân bài của web
+    fontSizeSM: type.label, // Nhãn, metadata
+    fontSizeLG: type.body, // Tiêu đề card, nội dung nhấn
+    fontSizeHeading4: type.title, // Tiêu đề trang
+    fontSizeHeading5: type.lead,
 
     // Font
-    fontFamily:
-      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+    fontFamily,
   },
   components: {
     Button: {
-      borderRadius: 8,
+      borderRadius: radius.md,
       controlHeight: 44, // Nút thao tác - đủ lớn để bấm bằng ngón tay trên tablet
       controlHeightSM: 34,
       controlHeightLG: 52,
-      contentFontSize: 16,
-      contentFontSizeLG: 18,
+      contentFontSize: type.body,
+      contentFontSizeLG: type.lead,
     },
     Card: {
-      borderRadius: 12,
+      borderRadius: radius.lg,
       boxShadow: colors.shadowCard,
-      headerFontSize: 18, // Tiêu đề card tách khỏi cỡ chữ thân bài
+      headerFontSize: type.lead, // Tiêu đề card tách khỏi cỡ chữ thân bài
     },
     Menu: {
-      borderRadius: 8,
-      fontSize: 15, // Điều hướng là vai trò phụ, giữ nhỏ hơn thân bài để 8 mục không tràn
+      borderRadius: radius.md,
+      // Sidebar dọc rộng 248px, không còn ràng buộc "8 mục phải vừa một
+      // hàng ngang" từng ép cỡ chữ menu nhỏ hơn thân bài.
+      fontSize: type.body,
     },
     Table: {
-      borderRadius: 8,
+      borderRadius: radius.md,
       headerBg: colors.brandSoft,
       headerColor: colors.brandInk,
-      fontSize: 16,
+      fontSize: type.body,
       cellPaddingBlock: 10, // Chữ to hơn nên siết đệm dòng lại, giữ mật độ bảng
     },
     Statistic: {
-      titleFontSize: 14,
-      contentFontSize: 28, // Con số là lý do tồn tại của thẻ. 28 là cỡ lớn nhất mà
-      // hàng 5 thẻ ở trang Báo cáo còn chứa được trên một dòng.
+      titleFontSize: type.label,
+      contentFontSize: type.metric, // Con số là lý do tồn tại của thẻ
     },
     Input: {
-      borderRadius: 8,
+      borderRadius: radius.md,
     },
     Modal: {
-      borderRadius: 16, // Modal bo góc nhiều hơn
+      borderRadius: radius.lg, // Modal bo góc nhiều hơn
     },
     Tag: {
-      borderRadius: 6,
+      borderRadius: radius.sm,
     },
   },
 };
