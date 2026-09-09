@@ -160,3 +160,26 @@ html {
   color: var(--c-brand-active);
 }
 
+
+/* Popup submenu tự rộng theo chữ. antd ghim min-width 160px cho popup rồi cắt
+   phần thừa bằng ellipsis; ở cỡ chữ hiện tại "Nhà cung cấp" đã tràn. Nới thành
+   một con số lớn hơn chỉ dời thời điểm vỡ sang lần đổi thang chữ sau, nên để nó
+   đo theo nội dung. */
+.ant-menu-submenu-popup .ant-menu-vertical {
+  width: max-content;
+  min-width: 100%;
+}
+
+/* width:auto phá vòng lặp: mục vốn rộng theo % của danh sách, mà danh sách giờ
+   lại rộng theo mục. */
+.ant-menu-submenu-popup .ant-menu-item,
+.ant-menu-submenu-popup .ant-menu-submenu-title {
+  width: auto;
+  overflow: visible;
+  text-overflow: clip;
+}
+
+.ant-menu-submenu-popup .ant-menu-title-content {
+  overflow: visible;
+  text-overflow: clip;
+}
