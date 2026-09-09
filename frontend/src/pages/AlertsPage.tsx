@@ -170,7 +170,7 @@ export default function AlertsPage() {
             key: 'low-stock',
             label: (
               <span>
-                <WarningOutlined /> Sắp hết kho
+                <WarningOutlined /> Sắp hết hàng
                 {lowStockItems.length > 0 && (
                   <Tag color="orange" style={{ marginLeft: 8 }}>
                     {lowStockItems.length}

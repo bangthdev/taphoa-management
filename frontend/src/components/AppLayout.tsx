@@ -337,7 +337,9 @@ export default function AppLayout() {
 
       <Content
         style={{
-          margin: 24,
+          margin: '24px auto',
+          width: 'calc(100% - 48px)',
+          maxWidth: 1440,
           padding: 24,
           background: colorBgContainer,
           borderRadius: borderRadiusLG,

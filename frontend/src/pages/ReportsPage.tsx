@@ -35,6 +35,7 @@ import {
   Area,
   Legend,
 } from 'recharts';
+import type { LabelProps } from 'recharts';
 
 import { PageHeader } from '../components/common';
 import { useRevenueReport, useProfitReport, useCompareReport, useTopProducts } from '../hooks';
@@ -75,6 +76,21 @@ function getDateRange(quick: QuickRange): [Dayjs, Dayjs] {
       return [today, today];
   }
 }
+
+const statIconStyle = { fontSize: 18, marginRight: 6 };
+
+// Nhãn canh giữa trên điểm dữ liệu sẽ tràn ra ngoài vùng vẽ ở điểm đầu và điểm cuối,
+// đè lên vạch trục. Neo chữ theo vị trí trong chuỗi thay vì luôn canh giữa.
+const renderPointLabel = (total: number) => (props: LabelProps) => {
+  const num = (v: unknown) => (typeof v === 'number' ? v : Number(v ?? 0));
+  const index = typeof props.index === 'number' ? props.index : 0;
+  const anchor = index === 0 ? 'start' : index === total - 1 ? 'end' : 'middle';
+  return (
+    <text x={num(props.x)} y={num(props.y) - 8} textAnchor={anchor} fontSize={11} fill="#4b5563">
+      {yAxisFormatter(num(props.value))}
+    </text>
+  );
+};
 
 const vndFormatter = (value: unknown) => formatVND(typeof value === 'number' ? value : 0);
 const formatChartDate = (dateStr: string) => dayjs(dateStr).format('DD/MM');
@@ -197,8 +213,8 @@ function RevenueTab() {
               title="Doanh thu"
               value={revenue?.total_revenue ?? 0}
               formatter={v => formatVND(v as number)}
-              valueStyle={{ color: '#0d9488', fontSize: 20 }}
-              prefix={<DollarOutlined />}
+              valueStyle={{ color: '#0d9488' }}
+              prefix={<DollarOutlined style={statIconStyle} />}
             />
           </Card>
         </Col>
@@ -208,8 +224,8 @@ function RevenueTab() {
               title="Giá vốn"
               value={revenue?.total_cogs ?? 0}
               formatter={v => formatVND(v as number)}
-              valueStyle={{ color: '#6b7280', fontSize: 20 }}
-              prefix={<ShoppingCartOutlined />}
+              valueStyle={{ color: '#6b7280' }}
+              prefix={<ShoppingCartOutlined style={statIconStyle} />}
             />
           </Card>
         </Col>
@@ -219,8 +235,8 @@ function RevenueTab() {
               title="Lợi nhuận"
               value={revenue?.total_profit ?? 0}
               formatter={v => formatVND(v as number)}
-              valueStyle={{ color: '#22c55e', fontSize: 20 }}
-              prefix={<RiseOutlined />}
+              valueStyle={{ color: '#22c55e' }}
+              prefix={<RiseOutlined style={statIconStyle} />}
             />
           </Card>
         </Col>
@@ -229,8 +245,8 @@ function RevenueTab() {
             <Statistic
               title="Số hóa đơn"
               value={revenue?.invoice_count ?? 0}
-              valueStyle={{ color: '#0d9488', fontSize: 20 }}
-              prefix={<ShoppingCartOutlined />}
+              valueStyle={{ color: '#0d9488' }}
+              prefix={<ShoppingCartOutlined style={statIconStyle} />}
             />
           </Card>
         </Col>
@@ -240,8 +256,8 @@ function RevenueTab() {
               title="Tổng giảm giá"
               value={revenue?.total_discount ?? 0}
               formatter={v => formatVND(v as number)}
-              valueStyle={{ color: '#f59e0b', fontSize: 20 }}
-              prefix={<PercentageOutlined />}
+              valueStyle={{ color: '#f59e0b' }}
+              prefix={<PercentageOutlined style={statIconStyle} />}
             />
           </Card>
         </Col>
@@ -279,7 +295,7 @@ function RevenueTab() {
               stroke="#22c55e"
               fill="#bbf7d0"
               dot={{ r: 3 }}
-              label={{ position: 'top', formatter: yAxisFormatter, fontSize: 11 }}
+              label={renderPointLabel(areaData.length)}
             />
           </AreaChart>
         </ResponsiveContainer>

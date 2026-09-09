@@ -4,11 +4,14 @@ import {
   WarningOutlined,
   ClockCircleOutlined,
   AlertOutlined,
+  ArrowRightOutlined,
 } from '@ant-design/icons';
-import { Card, Row, Col, Typography, Table, Tag, Statistic, Space } from 'antd';
+import { Alert, Card, Row, Col, Typography, Table, Tag, Statistic, Space, Button } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import dayjs from 'dayjs';
 import { useMemo, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
 import { useAuth } from '../contexts/useAuth';
 import {
@@ -17,9 +20,17 @@ import {
   useAlertSummary,
   useLowStockAlerts,
   useExpiryAlerts,
+  useRevenueReport,
 } from '../hooks';
 import type { Invoice } from '../types';
 import { formatVND } from '../utils/format';
+
+const statIconStyle = { fontSize: 18, color: '#0d9488', marginRight: 6 };
+
+const yAxisFormatter = (v: unknown) => {
+  const n = typeof v === 'number' ? v : 0;
+  return n >= 1000000 ? `${(n / 1000000).toFixed(1)}M` : n >= 1000 ? `${n / 1000}K` : `${n}`;
+};
 
 /**
  * DashboardPage - Trang tổng quan
@@ -38,6 +49,23 @@ function DashboardPage() {
   const { data: alertSummary, isLoading: loadingSummary } = useAlertSummary();
   const { data: lowStock = [], isLoading: loadingLowStock } = useLowStockAlerts();
   const { data: expiring = [], isLoading: loadingExpiring } = useExpiryAlerts(7, 10);
+
+  const isAdmin = user?.role === 'admin';
+  const chartFrom = useMemo(() => dayjs().subtract(6, 'day').format('YYYY-MM-DD'), []);
+  const chartTo = useMemo(() => dayjs().format('YYYY-MM-DD'), []);
+  const { data: weekRevenue, isLoading: loadingWeek } = useRevenueReport(
+    isAdmin ? chartFrom : '',
+    isAdmin ? chartTo : ''
+  );
+
+  const weekChartData = useMemo(
+    () =>
+      (weekRevenue?.daily ?? []).map(d => ({
+        date: dayjs(d.date).format('DD/MM'),
+        'Doanh thu': d.revenue,
+      })),
+    [weekRevenue]
+  );
 
   // 🎯 Memoize các tính toán - chỉ tính lại khi data thay đổi
   const completedInvoices = useMemo(
@@ -121,9 +149,28 @@ function DashboardPage() {
 
   return (
     <div>
-      <Typography.Title level={4} style={{ marginBottom: 24 }}>
-        Xin chào, {user?.name}!
-      </Typography.Title>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 16,
+          flexWrap: 'wrap',
+          marginBottom: 24,
+        }}
+      >
+        <Typography.Title level={4} style={{ margin: 0 }}>
+          Xin chào, {user?.name}!
+        </Typography.Title>
+        <Button
+          type="primary"
+          size="large"
+          icon={<ShoppingCartOutlined />}
+          onClick={() => navigate('/pos')}
+        >
+          Bán hàng
+        </Button>
+      </div>
 
       {/* Thống kê nhanh */}
       <Row gutter={16} style={{ marginBottom: 24 }}>
@@ -132,7 +179,7 @@ function DashboardPage() {
             <Statistic
               title="Đơn hôm nay"
               value={completedInvoices.length}
-              prefix={<ShoppingCartOutlined />}
+              prefix={<ShoppingCartOutlined style={statIconStyle} />}
             />
           </Card>
         </Col>
@@ -141,7 +188,7 @@ function DashboardPage() {
             <Statistic
               title="Doanh thu hôm nay"
               value={todayRevenue}
-              prefix={<DollarOutlined />}
+              prefix={<DollarOutlined style={statIconStyle} />}
               formatter={v => formatVND(v as number)}
             />
           </Card>
@@ -151,7 +198,7 @@ function DashboardPage() {
             <Statistic
               title="Cảnh báo"
               value={totalAlerts}
-              prefix={<AlertOutlined />}
+              prefix={<AlertOutlined style={statIconStyle} />}
               valueStyle={totalAlerts > 0 ? { color: '#cf1322' } : undefined}
             />
           </Card>
@@ -161,7 +208,7 @@ function DashboardPage() {
             <Statistic
               title="Ca hiện tại"
               value={currentShift ? `#${currentShift.id}` : 'Chưa mở'}
-              prefix={<ClockCircleOutlined />}
+              prefix={<ClockCircleOutlined style={statIconStyle} />}
               valueStyle={!currentShift ? { color: '#999' } : undefined}
             />
           </Card>
@@ -170,27 +217,56 @@ function DashboardPage() {
 
       {/* Cảnh báo chi tiết */}
       {alertSummary && (alertSummary.expired > 0 || alertSummary.expiring_7d > 0) && (
-        <Row gutter={16} style={{ marginBottom: 16 }}>
-          <Col span={24}>
-            <Card size="small" style={{ background: '#fff2f0', borderColor: '#ffccc7' }}>
-              <Space size="large">
-                {alertSummary.expired > 0 && (
-                  <Tag color="red" style={{ fontSize: 14, padding: '4px 12px' }}>
-                    {alertSummary.expired} lô đã hết hạn!
-                  </Tag>
-                )}
-                {alertSummary.expiring_7d > 0 && (
-                  <Tag color="orange" style={{ fontSize: 14, padding: '4px 12px' }}>
-                    {alertSummary.expiring_7d} lô hết hạn trong 7 ngày
-                  </Tag>
-                )}
-                <Typography.Link onClick={() => navigate('/alerts')}>
-                  Xem chi tiết →
-                </Typography.Link>
-              </Space>
-            </Card>
-          </Col>
-        </Row>
+        <Alert
+          type={alertSummary.expired > 0 ? 'error' : 'warning'}
+          showIcon
+          style={{ marginBottom: 16 }}
+          message={
+            <span style={{ fontSize: 16, fontWeight: 600 }}>
+              {alertSummary.expired > 0
+                ? `${alertSummary.expired} lô đã hết hạn — cần bỏ khỏi kho ngay`
+                : `${alertSummary.expiring_7d} lô sẽ hết hạn trong 7 ngày`}
+            </span>
+          }
+          description={
+            alertSummary.expired > 0 && alertSummary.expiring_7d > 0
+              ? `Thêm ${alertSummary.expiring_7d} lô nữa sẽ hết hạn trong 7 ngày.`
+              : 'Bán ưu tiên các lô này trước khi phải huỷ.'
+          }
+          action={
+            <Button
+              type="primary"
+              danger={alertSummary.expired > 0}
+              onClick={() => navigate('/alerts')}
+            >
+              Xem lô hàng
+            </Button>
+          }
+        />
+      )}
+
+      {/* Doanh thu 7 ngày gần nhất - chỉ admin, vì /reports/revenue là endpoint admin */}
+      {isAdmin && (
+        <Card
+          title="Doanh thu 7 ngày gần nhất"
+          loading={loadingWeek}
+          style={{ marginBottom: 16 }}
+          extra={
+            <Typography.Link onClick={() => navigate('/reports')}>
+              Báo cáo đầy đủ <ArrowRightOutlined />
+            </Typography.Link>
+          }
+        >
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={weekChartData} margin={{ top: 16, right: 16, left: 8, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="date" />
+              <YAxis tickFormatter={yAxisFormatter} />
+              <Tooltip formatter={(v: unknown) => formatVND(typeof v === 'number' ? v : 0)} />
+              <Bar dataKey="Doanh thu" fill="#0d9488" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </Card>
       )}
 
       <Row gutter={16}>

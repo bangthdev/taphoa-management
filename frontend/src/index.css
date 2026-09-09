@@ -11,14 +11,121 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
 }
 
-/* Table header consistent styling */
-.ant-table-thead > tr > th {
-  font-weight: 600 !important;
-  font-size: 13px !important;
-  white-space: nowrap;
-  letter-spacing: 0.01em;
+/* Bề mặt do trình duyệt vẽ - mặc định của chúng không thuộc hệ thiết kế nào */
+:root {
+  accent-color: #0d9488;
+  caret-color: #0d9488;
 }
 
-.ant-table-tbody > tr > td {
-  font-size: 14px;
+::selection {
+  background: #99f6e4;
+  color: #134e4a;
+}
+
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #5eead4 transparent;
+}
+
+:where(a, button, .ant-btn, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid #0d9488;
+  outline-offset: 2px;
+}
+
+/* antd không có token cho độ đậm của Statistic, mà con số nhạt thì
+   thua chính cái nhãn của nó về mức độ thu hút. */
+.ant-statistic-content-value {
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* Cột số phải thẳng hàng để so sánh được bằng mắt */
+.ant-statistic-content-value,
+.ant-table-tbody td,
+.ant-descriptions-item-content {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Header bảng đọc ra là header nhờ kiểu dáng, không nhờ cỡ chữ */
+.ant-table-thead > tr > th {
+  font-weight: 600 !important;
+  font-size: 14px !important;
+  white-space: nowrap;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border-bottom: 1px solid #99f6e4 !important;
+}
+
+/* Nút thao tác: phản hồi ngay khi trỏ vào và khi bấm xuống.
+   Nhấc lên khi hover, ấn xuống khi active - cùng một cử chỉ vật lý. */
+.ant-btn {
+  font-weight: 600;
+  transition:
+    transform 120ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 160ms cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 160ms ease,
+    border-color 160ms ease,
+    color 160ms ease;
+}
+
+.ant-btn-primary:not(:disabled) {
+  box-shadow: 0 1px 2px rgba(19, 78, 74, 0.24);
+}
+
+.ant-btn:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(19, 78, 74, 0.18);
+}
+
+.ant-btn:not(:disabled):active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(19, 78, 74, 0.28);
+  transition-duration: 60ms;
+}
+
+.ant-btn:disabled {
+  box-shadow: none;
+}
+
+/* Thẻ bấm được phải cho biết là bấm được */
+.ant-card-hoverable {
+  transition:
+    transform 160ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 160ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.ant-card-hoverable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(19, 78, 74, 0.12);
+}
+
+.ant-table-tbody > tr.ant-table-row:hover > td {
+  background: #f0fdfa;
+}
+
+/* Ít chuyển động hơn, không phải mất phản hồi:
+   bỏ dịch chuyển trong không gian, giữ lại màu và đổ bóng vì chúng mang thông tin. */
+@media (prefers-reduced-motion: reduce) {
+  .ant-btn,
+  .ant-card-hoverable {
+    transition:
+      box-shadow 160ms ease,
+      background-color 160ms ease,
+      border-color 160ms ease,
+      color 160ms ease;
+  }
+
+  .ant-btn:not(:disabled):hover,
+  .ant-btn:not(:disabled):active,
+  .ant-card-hoverable:hover {
+    transform: none;
+  }
+}
+
+/* Bật autoSize thì antd tự sinh min-height cho TextArea và đè lên style truyền vào,
+   nên ô nhập thấp hơn hai nút cạnh nó trong Space.Compact. Chặn ở đây mới ăn.
+   24px line-height + 9px đệm trên dưới + 2px viền = 44px, khớp Button.controlHeight. */
+.taphoa-chat-input.ant-input {
+  min-height: 44px !important;
+  padding-block: 9px;
 }

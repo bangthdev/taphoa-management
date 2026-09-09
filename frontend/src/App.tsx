@@ -60,14 +60,24 @@ const theme = {
     // Màu nền và text
     colorBgLayout: '#f0fdfa', // Teal 50 - nền layout nhẹ nhàng
     colorText: '#1f2937', // Gray 800 - text chính
-    colorTextSecondary: '#6b7280', // Gray 500 - text phụ
+    colorTextSecondary: '#4b5563', // Gray 600 - text phụ
+    // Mặc định của antd là rgba(0,0,0,.45), không đạt 4.5:1 trên nền trắng.
+    colorTextDescription: '#4b5563',
 
     // Border và radius
     borderRadius: 10, // Bo góc nhẹ nhàng
     borderRadiusLG: 12, // Bo góc lớn hơn cho card/modal
 
     // Kích thước
-    controlHeight: 36, // Chiều cao input/button vừa phải
+    controlHeight: 40, // Chiều cao input/button
+
+    // Thang chữ cố định, bước ~1.2. Giao diện tác nghiệp cần cỡ chữ ổn định
+    // giữa các màn hình, nên không dùng cỡ co giãn theo viewport.
+    fontSize: 16, // Thân bài và bảng dữ liệu — 16px là ngưỡng chữ thân bài của web
+    fontSizeSM: 14, // Nhãn, metadata
+    fontSizeLG: 16, // Tiêu đề card, nội dung nhấn
+    fontSizeHeading4: 24, // Tiêu đề trang
+    fontSizeHeading5: 18,
 
     // Font
     fontFamily:
@@ -76,20 +86,32 @@ const theme = {
   components: {
     Button: {
       borderRadius: 8,
-      controlHeight: 40, // Button cao hơn một chút - dễ bấm
+      controlHeight: 44, // Nút thao tác - đủ lớn để bấm bằng ngón tay trên tablet
+      controlHeightSM: 34,
+      controlHeightLG: 52,
+      contentFontSize: 16,
+      contentFontSizeLG: 18,
     },
     Card: {
       borderRadius: 12,
       boxShadow: '0 1px 3px rgba(0,0,0,0.1)', // Đổ bóng nhẹ
+      headerFontSize: 18, // Tiêu đề card tách khỏi cỡ chữ thân bài
     },
     Menu: {
       borderRadius: 8,
+      fontSize: 15, // Điều hướng là vai trò phụ, giữ nhỏ hơn thân bài để 8 mục không tràn
     },
     Table: {
       borderRadius: 8,
       headerBg: '#f0fdfa', // Nền header bảng màu teal nhạt
-      headerColor: '#374151', // Gray 700 - chữ header đậm hơn
-      fontSize: 14,
+      headerColor: '#0f766e', // Teal 700
+      fontSize: 16,
+      cellPaddingBlock: 10, // Chữ to hơn nên siết đệm dòng lại, giữ mật độ bảng
+    },
+    Statistic: {
+      titleFontSize: 14,
+      contentFontSize: 28, // Con số là lý do tồn tại của thẻ. 28 là cỡ lớn nhất mà
+      // hàng 5 thẻ ở trang Báo cáo còn chứa được trên một dòng.
     },
     Input: {
       borderRadius: 8,
