@@ -413,9 +413,9 @@ export default function POSPage() {
             type="text"
             icon={<ArrowLeftOutlined />}
             onClick={() => navigate('/')}
-            style={{ color: colors.onBrand, width: 44, height: 44, fontSize: type.body }}
+            style={{ color: colors.onBrand, width: 44, height: 44, fontSize: type.lead }}
           />
-          <Typography.Text strong style={{ color: colors.onBrand, fontSize: type.body }}>
+          <Typography.Text strong style={{ color: colors.onBrand, fontSize: type.lead }}>
             Bán hàng
           </Typography.Text>
         </Space>
@@ -428,7 +428,7 @@ export default function POSPage() {
                 background: colors.successSoft,
                 border: `1px solid ${colors.profitSoft}`,
                 color: colors.successInk,
-                fontSize: type.label,
+                fontSize: type.body,
               }}
             >
               Ca #{currentShift.id}
@@ -440,13 +440,13 @@ export default function POSPage() {
                 background: colors.dangerSoft,
                 border: `1px solid ${colors.dangerBorder}`,
                 color: colors.dangerInk,
-                fontSize: type.label,
+                fontSize: type.body,
               }}
             >
               Chưa mở ca
             </Tag>
           )}
-          <Typography.Text style={{ color: colors.onBrand, fontSize: type.label }}>
+          <Typography.Text style={{ color: colors.onBrand, fontSize: type.body }}>
             {user?.name}
           </Typography.Text>
         </Space>
@@ -881,7 +881,10 @@ export default function POSPage() {
               {/* Total + checkout button */}
               <div
                 style={{
-                  background: colors.brand,
+                  // brandActive chứ không phải brand: nhãn trắng trên brand chỉ đạt
+                  // 3.70:1, trên brandActive đạt 7.90:1. Ô này là chỗ liếc một cái
+                  // để biết thu bao nhiêu, không phải chỗ để đoán.
+                  background: colors.brandActive,
                   borderRadius: radius.md,
                   padding: '12px 16px',
                   display: 'flex',
@@ -893,7 +896,7 @@ export default function POSPage() {
                 {/* Nhãn kèm một con số lớn — cùng vai trò "nhãn KPI" type.label mô tả,
                     không phải một dòng thân bài — nên lấy label thay vì body dù 14 gần
                     body hơn theo số học. */}
-                <Typography.Text style={{ color: colors.onBrandMuted, fontSize: type.label }}>
+                <Typography.Text style={{ color: colors.onBrand, fontSize: type.label }}>
                   THÀNH TIỀN
                 </Typography.Text>
                 <Typography.Title
@@ -920,7 +923,7 @@ export default function POSPage() {
                 loading={checkoutLoading}
                 style={{
                   height: 56,
-                  fontSize: type.lead,
+                  fontSize: type.body,
                   // weight.bold dành riêng cho type.metric/type.hero (xem chú thích ở
                   // nút mệnh giá) — 700 dùng semibold thay vì bold.
                   fontWeight: weight.semibold,
