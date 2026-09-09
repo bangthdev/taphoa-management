@@ -78,12 +78,19 @@ func parseDateRange(c *gin.Context) (time.Time, time.Time, error) {
 	fromStr := c.DefaultQuery("from", todayStr)
 	toStr := c.DefaultQuery("to", todayStr)
 
-	from, err := time.Parse("2006-01-02", fromStr)
+	// Mốc ngày phải hiểu theo giờ VN, không phải UTC: "hôm nay" với người bán bắt
+	// đầu từ 0h giờ VN, tức 17h UTC hôm trước.
+	loc, err := time.LoadLocation("Asia/Ho_Chi_Minh")
+	if err != nil {
+		loc = time.FixedZone("ICT", 7*3600)
+	}
+
+	from, err := time.ParseInLocation("2006-01-02", fromStr, loc)
 	if err != nil {
 		return time.Time{}, time.Time{}, err
 	}
 
-	toDay, err := time.Parse("2006-01-02", toStr)
+	toDay, err := time.ParseInLocation("2006-01-02", toStr, loc)
 	if err != nil {
 		return time.Time{}, time.Time{}, err
 	}
@@ -104,14 +111,14 @@ func queryDailyRevenue(from, to time.Time) ([]RevenueDataPoint, error) {
 
 	err := config.DB.Raw(`
 		SELECT
-			TO_CHAR(created_at, 'YYYY-MM-DD') AS date,
+			TO_CHAR(created_at AT TIME ZONE 'Asia/Ho_Chi_Minh', 'YYYY-MM-DD') AS date,
 			COALESCE(SUM(final_total), 0)     AS revenue,
 			COUNT(*)                           AS invoice_count
 		FROM invoices
 		WHERE status = ?
 		  AND created_at >= ?
 		  AND created_at <= ?
-		GROUP BY TO_CHAR(created_at, 'YYYY-MM-DD')
+		GROUP BY TO_CHAR(created_at AT TIME ZONE 'Asia/Ho_Chi_Minh', 'YYYY-MM-DD')
 		ORDER BY date
 	`, invoiceStatusCompleted, from, to).Scan(&rows).Error
 
@@ -311,7 +318,7 @@ func GetProfitReport(c *gin.Context) {
 
 	err = config.DB.Raw(`
 		SELECT
-			TO_CHAR(i.created_at, 'YYYY-MM-DD') AS date,
+			TO_CHAR(i.created_at AT TIME ZONE 'Asia/Ho_Chi_Minh', 'YYYY-MM-DD') AS date,
 			COALESCE(SUM(i.final_total), 0) AS revenue,
 			COALESCE(SUM(item_cogs.cogs), 0) AS cogs,
 			COALESCE(SUM(i.final_total), 0) - COALESCE(SUM(item_cogs.cogs), 0) AS profit
@@ -324,7 +331,7 @@ func GetProfitReport(c *gin.Context) {
 		WHERE i.status = ?
 		  AND i.created_at >= ?
 		  AND i.created_at <= ?
-		GROUP BY TO_CHAR(i.created_at, 'YYYY-MM-DD')
+		GROUP BY TO_CHAR(i.created_at AT TIME ZONE 'Asia/Ho_Chi_Minh', 'YYYY-MM-DD')
 		ORDER BY date
 	`, invoiceStatusCompleted, from, to).Scan(&rows).Error
 	if err != nil {

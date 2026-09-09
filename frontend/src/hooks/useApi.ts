@@ -148,7 +148,12 @@ export function useTodayInvoices() {
   return useQuery({
     queryKey: queryKeys.invoices.today(),
     queryFn: async () => {
-      const today = new Date().toISOString().split('T')[0];
+      // toISOString() đổi sang UTC, nên từ 00:00 đến 07:00 giờ VN nó trả về ngày hôm
+      // trước và Dashboard hiển thị doanh số hôm qua như của hôm nay. Lấy ngày theo giờ máy.
+      const now = new Date();
+      const today = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(
+        now.getDate()
+      ).padStart(2, '0')}`;
       const res = await api.get('/invoices', { params: { date: today, limit: 100 } });
       return res.data as Invoice[];
     },

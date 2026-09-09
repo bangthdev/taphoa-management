@@ -246,7 +246,9 @@ func ListInvoices(c *gin.Context) {
 			c.JSON(http.StatusBadRequest, gin.H{"error": "date phải có format YYYY-MM-DD"})
 			return
 		}
-		query = query.Where("DATE(created_at) = ?", date)
+		// created_at lưu theo UTC; đổi về giờ VN trước khi lấy ngày, nếu không đơn
+		// bán trước 7h sáng bị tính sang ngày hôm trước.
+		query = query.Where("DATE(created_at AT TIME ZONE 'Asia/Ho_Chi_Minh') = ?", date)
 	}
 	// FIX R18: Validate shift_id là số
 	if shiftID := c.Query("shift_id"); shiftID != "" {
