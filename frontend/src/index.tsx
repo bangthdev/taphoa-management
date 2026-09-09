@@ -5,9 +5,11 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { injectColorVariables } from './theme/colors';
+import { injectTypographyVariables } from './theme/typography';
 
-// Phải chạy trước lần render đầu, để CSS có sẵn biến --c-* khi khung hình đầu tiên vẽ.
+// Phải chạy trước lần render đầu, để CSS có sẵn biến --c-*/--t-* khi khung hình đầu tiên vẽ.
 injectColorVariables();
+injectTypographyVariables();
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
