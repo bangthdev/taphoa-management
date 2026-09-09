@@ -61,8 +61,8 @@ export const colors = {
   brandInk: scale.indigo900,
   /** Chữ và icon đặt trên nền thương hiệu đậm hoặc trên sidebar */
   onBrand: scale.white,
-  /** 3.49:1–4.05:1 so với gradient sidebar; dùng cho nhãn và biểu tượng, không dùng cho đoạn text */
-  onBrandMuted: 'rgba(255, 255, 255, 0.72)',
+  /** 4.55:1–5.01:1 trên brandGradient; đạt AA cho cả đoạn text, nhưng vẫn là biến thể mờ dành cho nhãn phụ */
+  onBrandMuted: 'rgba(255, 255, 255, 0.85)',
   onBrandBorder: 'rgba(255, 255, 255, 0.28)',
   onBrandActiveBg: 'rgba(255, 255, 255, 0.18)',
   /** Nền khối biểu tượng (logo) nổi trên gradient thương hiệu */
@@ -114,8 +114,8 @@ export const colors = {
   /* ---------- Gradient (hướng Aurora tím) ---------- */
   /** Nền sidebar dọc */
   sidebar: `linear-gradient(170deg, ${scale.indigo600} 0%, ${scale.violet600} 55%, ${scale.purple600} 100%)`,
-  /** Nút hành động chính */
-  brandGradient: `linear-gradient(90deg, ${scale.indigo500}, ${scale.purple500})`,
+  /** Nút hành động chính và header ứng dụng; chữ trắng trên nền này đạt AA (5.70:1–6.29:1) */
+  brandGradient: `linear-gradient(90deg, ${scale.indigo600}, ${scale.violet600})`,
   /** Hai quầng màu mờ trên nền trang, tạo chiều sâu mà không cản việc đọc */
   auroraGlow: `radial-gradient(720px 240px at 88% -10%, ${scale.purple500}24, transparent 70%), radial-gradient(560px 240px at 4% 108%, ${scale.sky500}1f, transparent 70%)`,
 
