@@ -1,4 +1,5 @@
-// Chặn mã màu viết rải rác. Màu chỉ được khai báo ở src/theme/colors.ts;
+// Chặn mã màu viết rải rác, ở BẤT KỲ ký pháp nào (hex, rgb/rgba, hsl/hsla).
+// Màu chỉ được khai báo ở src/theme/colors.ts;
 // nơi khác đọc qua `colors` (TypeScript) hoặc biến --c-* (CSS).
 import { readdirSync, readFileSync, statSync } from 'node:fs';
 import { join, relative, sep } from 'node:path';
@@ -20,7 +21,7 @@ const ALLOWLIST = [
   'pages/ReportsPage.tsx',
 ];
 
-const HEX = /#[0-9a-fA-F]{3,8}\b/g;
+const COLOR = /#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?)\s*\([^)]*\)/gi;
 
 function* walk(dir) {
   for (const entry of readdirSync(dir)) {
@@ -44,7 +45,7 @@ for (const file of walk(SRC)) {
   readFileSync(file, 'utf8')
     .split('\n')
     .forEach((line, index) => {
-      for (const match of line.matchAll(HEX)) {
+      for (const match of line.matchAll(COLOR)) {
         offenders.push(`  src/${rel}:${index + 1}  ${match[0]}`);
       }
     });

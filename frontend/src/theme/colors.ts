@@ -124,6 +124,18 @@ export const colors = {
   shadowCard: `0 1px 2px ${scale.indigo900}0f, 0 8px 24px ${scale.indigo900}12`,
   shadowCardHover: `0 2px 4px ${scale.indigo900}14, 0 12px 32px ${scale.indigo900}1f`,
   shadowRaised: `0 4px 12px ${scale.indigo900}2e`,
+  /** Bóng mặc định của nút thao tác chính */
+  shadowButton: `0 1px 2px ${scale.indigo900}3d`,
+  /** Bóng của nút thao tác chính khi đang bấm xuống — đậm hơn shadowButton */
+  shadowButtonActive: `0 1px 2px ${scale.indigo900}47`,
+  /** Bóng khi trỏ vào thẻ có thể bấm (card-hoverable) */
+  shadowCardHoverable: `0 8px 20px ${scale.indigo900}1f`,
+  /** Bóng trung tính tách thanh header dính (sticky) khỏi nội dung bên dưới */
+  shadowHeader: '0 2px 8px rgba(0, 0, 0, 0.15)',
+  /** Bóng trung tính rất nhẹ, nâng khối nội dung khỏi nền trang */
+  shadowPanel: '0 1px 3px rgba(0, 0, 0, 0.05)',
+  /** Bóng trung tính cho panel nổi (floating), như widget chat góc màn hình */
+  shadowFloating: '0 8px 24px rgba(0, 0, 0, 0.15)',
 } as const;
 
 /** `brandSoft` → `--c-brand-soft` */
@@ -139,4 +151,9 @@ export function injectColorVariables(root: HTMLElement = document.documentElemen
   for (const [token, value] of Object.entries(colors)) {
     root.style.setProperty(toCssVarName(token), value);
   }
+
+  // <meta name="theme-color"> tô màu chrome trình duyệt (thanh địa chỉ trên mobile),
+  // không đọc được biến CSS nên phải set bằng JS để không lệch khỏi bảng màu.
+  const themeColorMeta = document.querySelector('meta[name="theme-color"]');
+  themeColorMeta?.setAttribute('content', colors.brand);
 }

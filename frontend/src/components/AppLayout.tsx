@@ -223,7 +223,7 @@ export default function AppLayout() {
           position: 'sticky',
           top: 0,
           zIndex: 100,
-          boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+          boxShadow: colors.shadowHeader,
         }}
       >
         {/* Logo */}
@@ -343,7 +343,7 @@ export default function AppLayout() {
           background: colorBgContainer,
           borderRadius: borderRadiusLG,
           minHeight: 'calc(100vh - 112px)',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+          boxShadow: colors.shadowPanel,
         }}
       >
         <Breadcrumbs />

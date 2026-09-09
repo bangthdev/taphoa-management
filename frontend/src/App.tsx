@@ -61,7 +61,7 @@ const theme = {
     colorBgLayout: colors.bg,
     colorText: colors.text,
     colorTextSecondary: colors.textSecondary,
-    // Mặc định của antd là rgba(0,0,0,.45), không đạt 4.5:1 trên nền trắng.
+    // Mặc định của antd cho màu này quá nhạt, không đạt tỉ lệ tương phản 4.5:1 trên nền trắng.
     colorTextDescription: colors.textSecondary,
 
     // Border và radius

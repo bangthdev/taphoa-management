@@ -4,6 +4,7 @@ import { Alert, Button, Card, FloatButton, Space, Tooltip, Typography } from 'an
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { type ImageBlock } from '../../lib/chatImage';
+import { colors } from '../../theme/colors';
 
 import ChatInput from './ChatInput';
 import ChatMessage, { type ChatMessageData } from './ChatMessage';
@@ -130,7 +131,7 @@ export default function ChatWidget() {
             width: `min(${PANEL_W}px, calc(100vw - 32px))`,
             height: PANEL_H,
             zIndex: 1000,
-            boxShadow: '0 8px 24px rgba(0,0,0,0.15)',
+            boxShadow: colors.shadowFloating,
             display: 'flex',
             flexDirection: 'column',
           }}
