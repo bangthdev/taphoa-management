@@ -39,8 +39,12 @@ const scale = {
   slate200: '#e2e8f0',
   slate300: '#cbd5e1',
   slate400: '#94a3b8',
+  slate500: '#64748b',
   slate600: '#475569',
   slate800: '#1e293b',
+
+  gray900: '#1f2937',
+  gray50: '#f6f6fb',
 } as const;
 
 export const colors = {
@@ -56,6 +60,7 @@ export const colors = {
   brandInk: scale.indigo900,
   /** Chữ và icon đặt trên nền thương hiệu đậm hoặc trên sidebar */
   onBrand: scale.white,
+  /** 3.5:1–3.7:1 against sidebar gradient; use for labels and icons, not body text */
   onBrandMuted: 'rgba(255, 255, 255, 0.72)',
   onBrandBorder: 'rgba(255, 255, 255, 0.28)',
   onBrandActiveBg: 'rgba(255, 255, 255, 0.18)',
@@ -67,8 +72,9 @@ export const colors = {
   info: scale.blue500,
 
   /* ----------
-   * Màu ngữ nghĩa theo nghiệp vụ. Mỗi màu mang đúng một nghĩa trên toàn app —
-   * nhìn màu là đoán được loại thông tin mà không cần đọc nhãn.
+   * Màu ngữ nghĩa theo nghiệp vụ. Mỗi vai trò ghi nhận một ý nghĩa cụ thể tại call site.
+   * Một số vai trò cố ý dùng chung giá trị (brand và revenue đều dùng indigo500;
+   * warning và lowStock đều dùng amber500) để thống nhất thị giác và giảm bảng màu.
    * ---------- */
   /** Doanh thu, tiền vào */
   revenue: scale.indigo500,
@@ -86,15 +92,15 @@ export const colors = {
   customer: scale.teal500,
 
   /* ---------- Chữ ---------- */
-  text: '#1f2937',
+  text: scale.gray900,
   /** Nhãn, mô tả. Gray 600 để đạt tỉ lệ tương phản 4.5:1 trên nền trắng */
   textSecondary: '#4b5563',
-  /** Chữ mờ nhất còn đọc được: placeholder, trạng thái rỗng */
-  textMuted: scale.slate400,
+  /** Dimmest text that still meets WCAG AA for body text (4.76:1 on white) */
+  textMuted: scale.slate500,
 
   /* ---------- Bề mặt ---------- */
   /** Nền ngoài cùng của trang */
-  bg: '#f6f6fb',
+  bg: scale.gray50,
   /** Nền của card, bảng, modal */
   surface: scale.white,
   /** Nền chìm: vùng bị vô hiệu, ô tổng kết */
@@ -116,8 +122,6 @@ export const colors = {
   shadowCardHover: `0 2px 4px ${scale.indigo900}14, 0 12px 32px ${scale.indigo900}1f`,
   shadowRaised: `0 4px 12px ${scale.indigo900}2e`,
 } as const;
-
-export type ColorToken = keyof typeof colors;
 
 /** `brandSoft` → `--c-brand-soft` */
 function toCssVarName(token: string): string {
