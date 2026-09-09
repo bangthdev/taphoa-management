@@ -219,7 +219,15 @@ export default function AppLayout() {
         collapsible
         collapsed={collapsed}
         onCollapse={setCollapsed}
-        style={{ background: colors.sidebar, display: 'flex', flexDirection: 'column' }}
+        style={{
+          background: colors.sidebar,
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'sticky',
+          top: 0,
+          height: '100vh',
+          overflow: 'auto',
+        }}
       >
         {/* Logo */}
         <div
@@ -280,7 +288,15 @@ export default function AppLayout() {
             }
             navigate(key);
           }}
-          style={{ flex: 1, background: 'transparent', borderInlineEnd: 'none' }}
+          // minHeight: 0 bắt buộc để flex item này co lại và tự cuộn thay vì
+          // đẩy khối người dùng phía dưới ra khỏi màn hình.
+          style={{
+            flex: 1,
+            minHeight: 0,
+            overflowY: 'auto',
+            background: 'transparent',
+            borderInlineEnd: 'none',
+          }}
         />
 
         {/* User info + logout */}
@@ -302,7 +318,13 @@ export default function AppLayout() {
               >
                 {user?.name}
               </Typography.Text>
-              <Typography.Text style={{ color: colors.onBrandMuted, fontSize: type.label }}>
+              {/* onBrandMuted chỉ được đo trên brandGradient (4.55–5.01:1), chưa
+                  từng đo trên colors.sidebar — ở đầu purple600 nó tụt còn
+                  4.30:1, hụt AA. Dùng onBrand đặc, phân biệt với tên bằng
+                  weight thay vì độ mờ. */}
+              <Typography.Text
+                style={{ color: colors.onBrand, fontWeight: weight.regular, fontSize: type.label }}
+              >
                 {user?.role === 'admin' ? 'Quản lý' : 'Nhân viên'}
               </Typography.Text>
             </div>

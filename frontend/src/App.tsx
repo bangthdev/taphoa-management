@@ -102,6 +102,18 @@ const theme = {
       // Sidebar dọc rộng 248px, không còn ràng buộc "8 mục phải vừa một
       // hàng ngang" từng ép cỡ chữ menu nhỏ hơn thân bài.
       fontSize: type.body,
+      // antd mặc định darkItemColor là trắng mờ 65% alpha, đo trên
+      // colors.sidebar chỉ đạt 3.11:1 tới 3.59:1 — dưới ngưỡng AA 4.5:1.
+      // Trắng đặc đạt 5.38:1 tới 6.29:1 trên cả dải gradient.
+      darkItemColor: colors.onBrand,
+      darkItemSelectedColor: colors.onBrand,
+      // Mặc định darkItemSelectedBg = colorPrimary (colors.brand) chỉ 4.47:1
+      // với chữ trắng — hụt AA. brandActive đạt 7.90:1.
+      darkItemSelectedBg: colors.brandActive,
+      // antd hardcode màu nền gần đen cho submenu mở trong mode inline
+      // (token darkSubMenuItemBg) — phá gradient sidebar. Đặt trong suốt
+      // để lộ nền Sider.
+      darkSubMenuItemBg: 'transparent',
     },
     Table: {
       borderRadius: radius.md,
