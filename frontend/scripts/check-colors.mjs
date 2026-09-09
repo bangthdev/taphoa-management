@@ -10,11 +10,9 @@ const SOURCE_OF_TRUTH = 'theme/colors.ts';
 // Danh sách rút dần: mỗi task migrate xong một file thì xoá tên nó khỏi đây.
 // Khi mảng rỗng, xoá luôn hằng này cùng nhánh kiểm tra bên dưới.
 const ALLOWLIST = [
-  'App.css',
   'components/AppLayout.tsx',
   'components/chat/ChatInput.tsx',
   'components/chat/ChatMessage.tsx',
-  'index.css',
   'pages/CreatePurchaseOrderPage.tsx',
   'pages/DashboardPage.tsx',
   'pages/LoginPage.css',

@@ -13,22 +13,22 @@ code {
 
 /* Bề mặt do trình duyệt vẽ - mặc định của chúng không thuộc hệ thiết kế nào */
 :root {
-  accent-color: #0d9488;
-  caret-color: #0d9488;
+  accent-color: var(--c-brand);
+  caret-color: var(--c-brand);
 }
 
 ::selection {
-  background: #99f6e4;
-  color: #134e4a;
+  background: var(--c-brand-soft-strong);
+  color: var(--c-brand-ink);
 }
 
 html {
   scrollbar-width: thin;
-  scrollbar-color: #5eead4 transparent;
+  scrollbar-color: var(--c-brand-border) transparent;
 }
 
 :where(a, button, .ant-btn, input, select, textarea, [tabindex]):focus-visible {
-  outline: 2px solid #0d9488;
+  outline: 2px solid var(--c-brand);
   outline-offset: 2px;
 }
 
@@ -53,7 +53,7 @@ html {
   white-space: nowrap;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  border-bottom: 1px solid #99f6e4 !important;
+  border-bottom: 1px solid var(--c-brand-border) !important;
 }
 
 /* Nút thao tác: phản hồi ngay khi trỏ vào và khi bấm xuống.
@@ -100,7 +100,7 @@ html {
 }
 
 .ant-table-tbody > tr.ant-table-row:hover > td {
-  background: #f0fdfa;
+  background: var(--c-brand-soft);
 }
 
 /* Ít chuyển động hơn, không phải mất phản hồi:
