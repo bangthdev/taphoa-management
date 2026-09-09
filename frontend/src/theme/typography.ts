@@ -21,13 +21,13 @@ export const type = {
   /** Thân bài, ô nhập, nội dung bảng. 16px là ngưỡng chữ thân bài của web. */
   body: 18,
   /** Tiêu đề card, dòng nhấn trong danh sách. */
-  lead: 23,
+  lead: 22,
   /** Tiêu đề trang. */
-  title: 30,
+  title: 27,
   /** Số liệu KPI ở trang Tổng quan. */
-  metric: 38,
+  metric: 33,
   /** Con số quan trọng nhất một màn hình có: THÀNH TIỀN ở màn bán hàng. */
-  hero: 46,
+  hero: 44,
 } as const;
 
 export const weight = {
