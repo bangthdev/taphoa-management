@@ -52,11 +52,11 @@ export const space = {
 /**
  * Trần bề rộng cột nội dung. KHÔNG phải bề rộng cố định — nó chỉ chặn bảng
  * giãn vô hạn trên màn siêu rộng, nơi mắt phải quét quá xa giữa cột đầu và cột
- * cuối của một dòng. 1920 đo cho màn đích 27 inch (~2340px trừ 248px sidebar
+ * cuối của một dòng. 1800 chọn cho màn đích 27 inch (~2340px), chừa lề hai bên
  * mà vẫn còn là trần, không phải bề rộng cố định.
  */
 export const layout = {
-  contentMax: 1910,
+  contentMax: 1800,
 } as const;
 
 export const radius = {
