@@ -26,7 +26,6 @@ const SIZING_ALLOWLIST = new Set([
   'pages/CreatePurchaseOrderPage.tsx',
   'pages/DashboardPage.tsx',
   'pages/LoginPage.tsx',
-  'pages/POSPage.tsx',
   'pages/ProductsPage.tsx',
   'pages/ReportsPage.tsx',
   'styles/common.ts',

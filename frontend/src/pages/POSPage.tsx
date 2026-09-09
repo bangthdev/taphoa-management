@@ -40,6 +40,7 @@ import { useAuth } from '../contexts/useAuth';
 import { useProducts, useCustomers, useCurrentShift, useCreateInvoice } from '../hooks';
 import api from '../services/api';
 import { colors } from '../theme/colors';
+import { type, weight, radius } from '../theme/typography';
 import type { ProductWithStock } from '../types';
 import { formatVND, inputNumberFormatter, getErrorMessage } from '../utils/format';
 
@@ -61,9 +62,12 @@ interface ActiveOrder {
 const tabStyle = (isActive: boolean): React.CSSProperties => ({
   height: 48,
   padding: '0 20px',
-  borderRadius: 24,
-  fontSize: 15,
-  fontWeight: isActive ? 600 : 400,
+  // Bậc bo góc lớn nhất của thang (radius.lg = 16) không đạt được hình viên
+  // thuốc trọn vẹn (24 = nửa chiều cao 48) — chấp nhận bo tròn nhẹ hơn thay vì
+  // thêm bậc thứ bảy.
+  borderRadius: radius.lg,
+  fontSize: type.body,
+  fontWeight: isActive ? weight.semibold : weight.regular,
   background: isActive ? colors.brand : colors.surface,
   color: isActive ? colors.onBrand : colors.textSecondary,
   border: `2px solid ${isActive ? colors.brand : colors.borderStrong}`,
@@ -409,9 +413,9 @@ export default function POSPage() {
             type="text"
             icon={<ArrowLeftOutlined />}
             onClick={() => navigate('/')}
-            style={{ color: colors.onBrand, width: 44, height: 44, fontSize: 16 }}
+            style={{ color: colors.onBrand, width: 44, height: 44, fontSize: type.body }}
           />
-          <Typography.Text strong style={{ color: colors.onBrand, fontSize: 16 }}>
+          <Typography.Text strong style={{ color: colors.onBrand, fontSize: type.body }}>
             Bán hàng
           </Typography.Text>
         </Space>
@@ -424,7 +428,7 @@ export default function POSPage() {
                 background: colors.successSoft,
                 border: `1px solid ${colors.profitSoft}`,
                 color: colors.successInk,
-                fontSize: 13,
+                fontSize: type.label,
               }}
             >
               Ca #{currentShift.id}
@@ -436,13 +440,13 @@ export default function POSPage() {
                 background: colors.dangerSoft,
                 border: `1px solid ${colors.dangerBorder}`,
                 color: colors.dangerInk,
-                fontSize: 13,
+                fontSize: type.label,
               }}
             >
               Chưa mở ca
             </Tag>
           )}
-          <Typography.Text style={{ color: colors.onBrand, fontSize: 13 }}>
+          <Typography.Text style={{ color: colors.onBrand, fontSize: type.label }}>
             {user?.name}
           </Typography.Text>
         </Space>
@@ -482,7 +486,7 @@ export default function POSPage() {
                     justifyContent: 'center',
                     width: 32,
                     height: 32,
-                    borderRadius: 16,
+                    borderRadius: radius.lg,
                     cursor: 'pointer',
                     transition: 'background 0.15s',
                   }}
@@ -497,7 +501,7 @@ export default function POSPage() {
                     closeOrderTab(order.id);
                   }}
                 >
-                  <CloseOutlined style={{ fontSize: 13 }} />
+                  <CloseOutlined style={{ fontSize: type.label }} />
                 </span>
               )}
             </div>
@@ -507,7 +511,8 @@ export default function POSPage() {
           type="dashed"
           icon={<PlusOutlined />}
           onClick={createNewOrder}
-          style={{ height: 48, borderRadius: 24, fontSize: 15, padding: '0 20px' }}
+          // Xem chú thích trên tabStyle: cùng đánh đổi bo góc viên thuốc → radius.lg.
+          style={{ height: 48, borderRadius: radius.lg, fontSize: type.body, padding: '0 20px' }}
         >
           Thêm đơn
         </Button>
@@ -521,7 +526,7 @@ export default function POSPage() {
             {/* Search / barcode input */}
             <Input
               ref={searchRef}
-              prefix={<SearchOutlined style={{ color: colors.textMuted, fontSize: 18 }} />}
+              prefix={<SearchOutlined style={{ color: colors.textMuted, fontSize: type.lead }} />}
               placeholder="Quét barcode hoặc gõ tên sản phẩm..."
               value={search}
               onChange={e => setSearch(e.target.value)}
@@ -529,7 +534,7 @@ export default function POSPage() {
               allowClear
               size="large"
               autoFocus
-              style={{ marginBottom: 12, borderRadius: 12, height: 52, fontSize: 16 }}
+              style={{ marginBottom: 12, borderRadius: radius.md, height: 52, fontSize: type.body }}
               suffix={
                 <Button
                   type="primary"
@@ -538,7 +543,7 @@ export default function POSPage() {
                     setModalSearch('');
                     setProductModalOpen(true);
                   }}
-                  style={{ borderRadius: 8, height: 38 }}
+                  style={{ borderRadius: radius.md, height: 38 }}
                 >
                   Tìm
                 </Button>
@@ -559,7 +564,7 @@ export default function POSPage() {
               }
               style={{
                 flex: 1,
-                borderRadius: 12,
+                borderRadius: radius.md,
                 overflow: 'hidden',
                 display: 'flex',
                 flexDirection: 'column',
@@ -588,19 +593,19 @@ export default function POSPage() {
                       {/* STT */}
                       <Typography.Text
                         type="secondary"
-                        style={{ width: 24, textAlign: 'center', fontSize: 14 }}
+                        style={{ width: 24, textAlign: 'center', fontSize: type.body }}
                       >
                         {idx + 1}
                       </Typography.Text>
 
                       {/* Name + unit price */}
                       <div style={{ flex: 1, minWidth: 0 }}>
-                        <Typography.Text strong style={{ fontSize: 15 }} ellipsis>
+                        <Typography.Text strong style={{ fontSize: type.body }} ellipsis>
                           {item.product.name}
                         </Typography.Text>
                         <Typography.Text
                           type="secondary"
-                          style={{ fontSize: 13, display: 'block' }}
+                          style={{ fontSize: type.label, display: 'block' }}
                         >
                           {formatVND(item.product.sell_price)} / {item.product.unit}
                         </Typography.Text>
@@ -611,7 +616,12 @@ export default function POSPage() {
                         <Button
                           icon={<MinusOutlined />}
                           onClick={() => updateQty(item.product.id, item.quantity - 1)}
-                          style={{ width: 44, height: 44, borderRadius: 10, fontSize: 16 }}
+                          style={{
+                            width: 44,
+                            height: 44,
+                            borderRadius: radius.md,
+                            fontSize: type.body,
+                          }}
                         />
                         <InputNumber
                           min={1}
@@ -623,7 +633,12 @@ export default function POSPage() {
                         <Button
                           icon={<PlusOutlined />}
                           onClick={() => updateQty(item.product.id, item.quantity + 1)}
-                          style={{ width: 44, height: 44, borderRadius: 10, fontSize: 16 }}
+                          style={{
+                            width: 44,
+                            height: 44,
+                            borderRadius: radius.md,
+                            fontSize: type.body,
+                          }}
                         />
                       </Space>
 
@@ -631,7 +646,7 @@ export default function POSPage() {
                       <Typography.Text
                         strong
                         style={{
-                          fontSize: 15,
+                          fontSize: type.body,
                           color: colors.brand,
                           minWidth: 100,
                           textAlign: 'right',
@@ -646,7 +661,7 @@ export default function POSPage() {
                         danger
                         icon={<DeleteOutlined />}
                         onClick={() => removeFromCart(item.product.id)}
-                        style={{ width: 44, height: 44, fontSize: 16 }}
+                        style={{ width: 44, height: 44, fontSize: type.body }}
                       />
                     </div>
                   )}
@@ -660,7 +675,7 @@ export default function POSPage() {
             <Card
               style={{
                 flex: 1,
-                borderRadius: 12,
+                borderRadius: radius.md,
                 display: 'flex',
                 flexDirection: 'column',
                 overflow: 'hidden',
@@ -684,8 +699,8 @@ export default function POSPage() {
                   marginBottom: 12,
                 }}
               >
-                <Typography.Text style={{ fontSize: 15 }}>Tạm tính</Typography.Text>
-                <Typography.Text strong style={{ fontSize: 20 }}>
+                <Typography.Text style={{ fontSize: type.body }}>Tạm tính</Typography.Text>
+                <Typography.Text strong style={{ fontSize: type.lead }}>
                   {formatVND(subtotal)}
                 </Typography.Text>
               </div>
@@ -702,7 +717,7 @@ export default function POSPage() {
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                     <GiftOutlined style={{ color: colors.warning }} />
-                    <Typography.Text style={{ fontSize: 14 }}>Giảm giá</Typography.Text>
+                    <Typography.Text style={{ fontSize: type.body }}>Giảm giá</Typography.Text>
                   </div>
                 </div>
                 <Space.Compact style={{ width: '100%' }}>
@@ -751,7 +766,7 @@ export default function POSPage() {
                     onClick={() =>
                       setDiscountMode(discountMode === 'amount' ? 'percent' : 'amount')
                     }
-                    style={{ width: 44, fontWeight: 600 }}
+                    style={{ width: 44, fontWeight: weight.semibold }}
                   >
                     ⇄
                   </Button>
@@ -762,7 +777,7 @@ export default function POSPage() {
               <div style={{ marginBottom: 10 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 6 }}>
                   <UserOutlined style={{ color: colors.brand }} />
-                  <Typography.Text style={{ fontSize: 14 }}>Khách hàng</Typography.Text>
+                  <Typography.Text style={{ fontSize: type.body }}>Khách hàng</Typography.Text>
                 </div>
                 <Select
                   showSearch
@@ -787,7 +802,7 @@ export default function POSPage() {
               <div style={{ marginBottom: 8 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
                   <CreditCardOutlined style={{ color: colors.success }} />
-                  <Typography.Text style={{ fontSize: 14 }}>Tiền khách đưa</Typography.Text>
+                  <Typography.Text style={{ fontSize: type.body }}>Tiền khách đưa</Typography.Text>
                 </div>
                 <InputNumber
                   min={0}
@@ -817,9 +832,12 @@ export default function POSPage() {
                     onClick={() => setCashGiven(cashGiven === d ? 0 : d)}
                     style={{
                       height: 44,
-                      borderRadius: 10,
-                      fontSize: 15,
-                      fontWeight: cashGiven === d ? 700 : 500,
+                      borderRadius: radius.md,
+                      fontSize: type.body,
+                      // weight.bold (800) dành riêng cho type.metric/type.hero — 700
+                      // ngang khoảng cách tới semibold(600) và bold(800), nên chọn
+                      // semibold theo đúng giới hạn đó thay vì làm tròn theo số.
+                      fontWeight: cashGiven === d ? weight.semibold : weight.medium,
                       borderColor: cashGiven === d ? colors.brand : undefined,
                       borderWidth: cashGiven === d ? 2 : 1,
                       color: cashGiven === d ? colors.brand : undefined,
@@ -837,7 +855,7 @@ export default function POSPage() {
                   style={{
                     background: colors.successSoft,
                     border: `1px solid ${colors.profitSoft}`,
-                    borderRadius: 10,
+                    borderRadius: radius.md,
                     padding: '12px 16px',
                     display: 'flex',
                     justifyContent: 'space-between',
@@ -845,10 +863,13 @@ export default function POSPage() {
                     marginBottom: 10,
                   }}
                 >
-                  <Typography.Text style={{ color: colors.successInk, fontSize: 14 }}>
+                  <Typography.Text style={{ color: colors.successInk, fontSize: type.body }}>
                     Tiền thừa:
                   </Typography.Text>
-                  <Typography.Text strong style={{ color: colors.successStrong, fontSize: 22 }}>
+                  <Typography.Text
+                    strong
+                    style={{ color: colors.successStrong, fontSize: type.lead }}
+                  >
                     {formatVND(changeAmount)}
                   </Typography.Text>
                 </div>
@@ -861,7 +882,7 @@ export default function POSPage() {
               <div
                 style={{
                   background: colors.brand,
-                  borderRadius: 12,
+                  borderRadius: radius.md,
                   padding: '12px 16px',
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -869,10 +890,22 @@ export default function POSPage() {
                   marginBottom: 8,
                 }}
               >
-                <Typography.Text style={{ color: colors.onBrandMuted, fontSize: 14 }}>
+                {/* Nhãn kèm một con số lớn — cùng vai trò "nhãn KPI" type.label mô tả,
+                    không phải một dòng thân bài — nên lấy label thay vì body dù 14 gần
+                    body hơn theo số học. */}
+                <Typography.Text style={{ color: colors.onBrandMuted, fontSize: type.label }}>
                   THÀNH TIỀN
                 </Typography.Text>
-                <Typography.Title level={3} style={{ color: colors.onBrand, margin: 0 }}>
+                <Typography.Title
+                  level={3}
+                  style={{
+                    color: colors.onBrand,
+                    margin: 0,
+                    fontSize: type.hero,
+                    fontWeight: weight.bold,
+                    fontVariantNumeric: 'tabular-nums',
+                  }}
+                >
                   {formatVND(finalTotal)}
                 </Typography.Title>
               </div>
@@ -887,9 +920,13 @@ export default function POSPage() {
                 loading={checkoutLoading}
                 style={{
                   height: 56,
-                  fontSize: 18,
-                  fontWeight: 700,
-                  borderRadius: 14,
+                  fontSize: type.lead,
+                  // weight.bold dành riêng cho type.metric/type.hero (xem chú thích ở
+                  // nút mệnh giá) — 700 dùng semibold thay vì bold.
+                  fontWeight: weight.semibold,
+                  // 14 số học gần radius.lg hơn, nhưng đây vẫn là "Nút" — nhóm mà
+                  // typography.ts xếp vào radius.md, nên chọn theo vai trò thay vì số.
+                  borderRadius: radius.md,
                   background:
                     activeOrder.items.length > 0 && effectiveCashGiven >= finalTotal
                       ? colors.brand
@@ -927,7 +964,7 @@ export default function POSPage() {
           onPressEnter={handleModalSearchEnter}
           allowClear
           size="large"
-          style={{ marginBottom: 16, borderRadius: 10 }}
+          style={{ marginBottom: 16, borderRadius: radius.md }}
           autoFocus
         />
 
@@ -953,12 +990,16 @@ export default function POSPage() {
                   }}
                   styles={{ body: { padding: 12 } }}
                   style={{
-                    borderRadius: 10,
+                    borderRadius: radius.md,
                     cursor: p.stock > 0 ? 'pointer' : 'not-allowed',
                     opacity: p.stock <= 0 ? 0.4 : 1,
                   }}
                 >
-                  <Typography.Text strong style={{ fontSize: 13, display: 'block' }} ellipsis>
+                  <Typography.Text
+                    strong
+                    style={{ fontSize: type.label, display: 'block' }}
+                    ellipsis
+                  >
                     {p.name}
                   </Typography.Text>
                   <div
@@ -969,12 +1010,18 @@ export default function POSPage() {
                       alignItems: 'center',
                     }}
                   >
-                    <Typography.Text style={{ fontSize: 14, fontWeight: 600, color: colors.brand }}>
+                    <Typography.Text
+                      style={{
+                        fontSize: type.body,
+                        fontWeight: weight.semibold,
+                        color: colors.brand,
+                      }}
+                    >
                       {formatVND(p.sell_price)}
                     </Typography.Text>
                     <Tag
                       color={p.stock > 10 ? 'success' : p.stock > 0 ? 'warning' : 'error'}
-                      style={{ fontSize: 12 }}
+                      style={{ fontSize: type.label }}
                     >
                       {p.stock}
                     </Tag>
