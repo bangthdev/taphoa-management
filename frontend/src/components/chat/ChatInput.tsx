@@ -3,6 +3,7 @@ import { Button, Input, Space, Tooltip, message as antMessage } from 'antd';
 import React, { useRef, useState } from 'react';
 
 import { fileToImageBlock, type ImageBlock } from '../../lib/chatImage';
+import { colors } from '../../theme/colors';
 
 interface Props {
   isLoading: boolean;
@@ -37,7 +38,7 @@ export default function ChatInput({ isLoading, onSend }: Props) {
   };
 
   return (
-    <div style={{ borderTop: '1px solid #f0f0f0', padding: 12 }}>
+    <div style={{ borderTop: `1px solid ${colors.border}`, padding: 12 }}>
       {images.length > 0 && (
         <Space wrap style={{ marginBottom: 8 }}>
           {images.map((img, i) => (

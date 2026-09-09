@@ -58,6 +58,10 @@ const scale = {
   rose200: '#fecaca',
   rose800: '#991b1b',
   red600: '#dc2626',
+
+  coral400: '#ff6b6b',
+  yellow300: '#ffe66d',
+  aqua400: '#4ecdc4',
 } as const;
 
 export const colors = {
@@ -175,6 +179,30 @@ export const colors = {
   shadowPanel: '0 1px 3px rgba(0, 0, 0, 0.05)',
   /** Bóng trung tính cho panel nổi (floating), như widget chat góc màn hình */
   shadowFloating: '0 8px 24px rgba(0, 0, 0, 0.15)',
+
+  /* ---------- Trang đăng nhập ---------- */
+  /** Nền toàn màn hình của trang đăng nhập */
+  loginBackdrop: `linear-gradient(135deg, ${scale.indigo600} 0%, ${scale.purple600} 100%)`,
+  /** Ba khối trang trí nổi phía sau khung đăng nhập */
+  loginAccentWarm: scale.coral400,
+  loginAccentBright: scale.yellow300,
+  loginAccentCool: scale.aqua400,
+  /** Nền kính mờ (glassmorphism) của khung đăng nhập */
+  loginCardBg: 'rgba(255, 255, 255, 0.85)',
+  /** Viền và vệt sáng trắng quanh khung đăng nhập, dùng chung cho viền, inset-shadow khi hover, và vòng xoay loading */
+  loginCardBorder: 'rgba(255, 255, 255, 0.3)',
+  /** Vệt sáng inset ở trạng thái nghỉ, mờ hơn loginCardBorder */
+  loginCardHighlight: 'rgba(255, 255, 255, 0.2)',
+  shadowLoginCard: '0 8px 32px rgba(0, 0, 0, 0.1)',
+  shadowLoginCardHover: '0 20px 40px rgba(0, 0, 0, 0.15)',
+  /** Nền ô nhập liệu, sáng hơn nền thẻ để phân biệt vùng gõ */
+  loginInputBg: 'rgba(255, 255, 255, 0.9)',
+  /** rgb(139, 92, 246) = brandLight (violet500) ở alpha thấp — vòng nhấn khi ô nhập được focus */
+  loginFocusRing: 'rgba(139, 92, 246, 0.1)',
+  /** rgb(99, 102, 241) = brand (indigo500) — quầng sáng cho logo và nút đăng nhập, ba mức đậm nhạt */
+  loginGlowSoft: 'rgba(99, 102, 241, 0.3)',
+  loginGlowHover: 'rgba(99, 102, 241, 0.4)',
+  loginGlowStrong: 'rgba(99, 102, 241, 0.5)',
 } as const;
 
 /** `brandSoft` → `--c-brand-soft` */

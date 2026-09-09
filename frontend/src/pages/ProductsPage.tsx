@@ -40,6 +40,7 @@ import {
   useCreateConversion,
   useDeleteConversion,
 } from '../hooks';
+import { colors } from '../theme/colors';
 import type { ProductWithStock, UnitConversion } from '../types';
 import {
   formatVND,
@@ -247,7 +248,7 @@ export default function ProductsPage() {
         .store-name {
           font-size: 8px;
           font-weight: 700;
-          color: #0d9488;
+          color: ${colors.brand};
           text-transform: uppercase;
           letter-spacing: 1.5px;
         }
@@ -325,7 +326,7 @@ export default function ProductsPage() {
               e.stopPropagation();
               handleShowPriceHistory(record.id, record.name);
             }}
-            style={{ color: '#94a3b8' }}
+            style={{ color: colors.textMuted }}
           />
         </Space>
       ),
@@ -620,14 +621,14 @@ export default function ProductsPage() {
               dataIndex: 'old_price',
               width: 120,
               align: 'right' as const,
-              render: (v: number) => <span style={{ color: '#ef4444' }}>{formatVND(v)}</span>,
+              render: (v: number) => <span style={{ color: colors.danger }}>{formatVND(v)}</span>,
             },
             {
               title: 'Giá mới',
               dataIndex: 'new_price',
               width: 120,
               align: 'right' as const,
-              render: (v: number) => <span style={{ color: '#22c55e' }}>{formatVND(v)}</span>,
+              render: (v: number) => <span style={{ color: colors.success }}>{formatVND(v)}</span>,
             },
             {
               title: 'Người sửa',

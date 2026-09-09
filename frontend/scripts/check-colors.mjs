@@ -8,15 +8,6 @@ import { fileURLToPath } from 'node:url';
 const SRC = fileURLToPath(new URL('../src/', import.meta.url));
 const SOURCE_OF_TRUTH = 'theme/colors.ts';
 
-// Danh sách rút dần: mỗi task migrate xong một file thì xoá tên nó khỏi đây.
-// Khi mảng rỗng, xoá luôn hằng này cùng nhánh kiểm tra bên dưới.
-const ALLOWLIST = [
-  'components/chat/ChatInput.tsx',
-  'components/chat/ChatMessage.tsx',
-  'pages/LoginPage.css',
-  'pages/ProductsPage.tsx',
-];
-
 const COLOR = /#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?)\s*\([^)]*\)/gi;
 
 function* walk(dir) {
@@ -30,7 +21,7 @@ function* walk(dir) {
   }
 }
 
-const allowed = new Set([SOURCE_OF_TRUTH, ...ALLOWLIST]);
+const allowed = new Set([SOURCE_OF_TRUTH]);
 const offenders = [];
 
 for (const file of walk(SRC)) {
@@ -57,4 +48,4 @@ if (offenders.length > 0) {
   process.exit(1);
 }
 
-console.log(`check-colors: sạch (${ALLOWLIST.length} file còn trong danh sách chờ migrate).`);
+console.log('check-colors: sạch, không có mã hex nào ngoài bảng màu.');

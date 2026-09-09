@@ -4,6 +4,8 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
+import { colors } from '../../theme/colors';
+
 // Type khớp với @langchain/langgraph-sdk message — định nghĩa lỏng để không phụ thuộc nội bộ SDK
 export interface ChatMessageData {
   id?: string;
@@ -49,7 +51,7 @@ export default function ChatMessage({ message }: Props) {
   if (!text && images.length === 0) {
     return (
       <Space align="start" style={{ width: '100%', marginBottom: 12 }}>
-        <Avatar icon={<RobotOutlined />} style={{ background: '#0d9488' }} />
+        <Avatar icon={<RobotOutlined />} style={{ background: colors.brand }} />
         <Typography.Text type="secondary">đang soạn…</Typography.Text>
       </Space>
     );
@@ -67,11 +69,11 @@ export default function ChatMessage({ message }: Props) {
     >
       <Avatar
         icon={isUser ? <UserOutlined /> : <RobotOutlined />}
-        style={{ background: isUser ? '#1677ff' : '#0d9488', flexShrink: 0 }}
+        style={{ background: isUser ? colors.info : colors.brand, flexShrink: 0 }}
       />
       <div
         style={{
-          background: isUser ? '#e6f4ff' : '#f5f5f5',
+          background: isUser ? colors.brandSoft : colors.surfaceSunken,
           padding: '8px 12px',
           borderRadius: 12,
           maxWidth: 280,
