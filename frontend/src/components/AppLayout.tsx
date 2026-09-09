@@ -216,6 +216,10 @@ export default function AppLayout() {
     <Layout style={{ minHeight: '100vh' }}>
       <Sider
         width={248}
+        // Pin cứng 80 thay vì để antd tự suy: mặc định collapsedWidth =
+        // controlHeightLG * 2, mà controlHeightLG lại kéo theo controlHeight
+        // toàn cục (40) → ra 100, một con số không ai chọn cho rail thu gọn.
+        collapsedWidth={80}
         collapsible
         collapsed={collapsed}
         onCollapse={setCollapsed}
@@ -381,7 +385,13 @@ export default function AppLayout() {
           )}
         </Header>
 
-        <Content className="taphoa-content" style={{ padding: space.xl }}>
+        {/* Cột nội dung cũ có maxWidth 1440 + margin auto để bảng không giãn
+            quá rộng trên màn lớn — giữ lại làm trần, không phải bề rộng cố
+            định, vì Sider giờ đã chiếm 248px cố định bên trái. */}
+        <Content
+          className="taphoa-content"
+          style={{ padding: space.xl, maxWidth: 1440, margin: '0 auto' }}
+        >
           <ErrorBoundary>
             <Outlet />
           </ErrorBoundary>
