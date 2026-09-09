@@ -2,7 +2,36 @@
 
 Hệ thống quản lý cửa hàng **tạp hóa**: bán hàng (POS), quản lý kho – lô – hạn sử dụng, nhập hàng, công nợ khách, báo cáo doanh thu/lợi nhuận, cảnh báo hết hạn/sắp hết hàng, kèm một **trợ lý chat AI** trả lời câu hỏi về dữ liệu cửa hàng.
 
-> Dự án cá nhân, đang phát triển theo từng *phase*. Repo nằm trong tổ chức `taphoa-team` trên GitHub.
+---
+
+## Vì sao có dự án này
+
+Nhà tôi bán tạp hóa và đang dùng KiotViet. Phần mềm chạy được, nhưng mẹ tôi dùng không quen, và mấy thứ mẹ cần thì nó chưa có. Tôi làm cái này theo đúng yêu cầu mẹ đưa ra, nên thứ tự ưu tiên bám theo việc thật ngoài cửa hàng chứ không theo danh sách tính năng cho đẹp.
+
+Ba chỗ vướng nhất:
+
+- **Hạn sử dụng.** Hàng nằm lâu quá hạn mà không ai để ý, đến lúc phát hiện thì chỉ còn nước bỏ. Đây là lý do tồn kho được quản lý theo **lô** chứ không chỉ theo số lượng.
+- **Công nợ khách.** Khách lẻ hằng ngày chỉ ghi là "khách lạ", không lưu thông tin — nhà chưa có chương trình tích điểm nên không có cớ để hỏi. Chỉ người quen mới lưu được. Phần công nợ vì vậy đến giờ vẫn là chỗ khó nhất và chưa giải quyết gọn.
+- **Lãi thật.** Trước đây chỉ nhìn được doanh thu; lãi thực tế bao nhiêu thì không tính ra được.
+
+## Trạng thái
+
+Dự án **đang tạm dừng**, lần cập nhật cuối 06/2026. Cửa hàng **chưa dùng chính thức**.
+
+Phần trợ lý chat AI mới làm dở — tôi nhận phần này để tự học LangGraph, hiện chỉ trả lời được những câu hỏi đơn giản về dữ liệu cửa hàng. Các phần còn lại (bán hàng, kho, nhập hàng, kiểm kê, cảnh báo, báo cáo) đã chạy được.
+
+## Ảnh màn hình
+
+<!-- TODO: chụp 4 ảnh, bỏ vào screenshots/ rồi bỏ comment bên dưới -->
+<!--
+| Bán hàng (POS) | Kho theo lô + hạn sử dụng |
+|---|---|
+| ![POS](screenshots/pos.png) | ![Kho](screenshots/inventory.png) |
+
+| Báo cáo doanh thu / lợi nhuận | Trợ lý chat AI |
+|---|---|
+| ![Báo cáo](screenshots/report.png) | ![Chat](screenshots/chat.png) |
+-->
 
 ---
 
@@ -31,7 +60,7 @@ flowchart LR
     CHAT -->|/api proxy| AGENT[Agent LangGraph<br/>:2024]
     AGENT -->|đọc dữ liệu| BE
     AGENT -->|Gemini API| GEMINI[(Google Gemini)]
-    BE --> DB[(PostgreSQL<br/>:5433)]
+    BE --> DB[(PostgreSQL<br/>:5434)]
     AGENT --> SQLITE[(SQLite<br/>drafts + observations)]
 ```
 
@@ -41,7 +70,7 @@ flowchart LR
 | `frontend/` | Giao diện quản lý chính | React 19, Vite, TypeScript, Ant Design 6, React Query, React Router 7, Recharts | 3000 |
 | `agent/` | Trợ lý chat AI | LangGraph.js, Gemini (`@langchain/google-genai`), SQLite | 2024 |
 | `chat-ui/` | Giao diện chat (app bên thứ 3) | Next.js — [agent-chat-ui](https://github.com/langchain-ai/agent-chat-ui) | 3030 |
-| PostgreSQL | Cơ sở dữ liệu | Docker `postgres:16` | 5433 |
+| PostgreSQL | Cơ sở dữ liệu | Docker `postgres:16` | 5434 |
 
 > ⚠️ `chat-ui/` **không** được commit vào repo (xem `.gitignore`). Nó là app mã nguồn mở bên thứ ba, được **clone riêng** — xem mục [Trợ lý chat AI](#4-trợ-lý-chat-ai-tùy-chọn).
 
@@ -94,7 +123,7 @@ taphoa-management/
 ### 1. Cơ sở dữ liệu (PostgreSQL qua Docker)
 
 ```bash
-docker compose up -d        # khởi động postgres:16 ở port 5433
+docker compose up -d        # khởi động postgres:16 ở port 5434
 ```
 
 ### 2. Backend (Go) — port 8082
@@ -154,7 +183,8 @@ Mỗi phần có file `.env.example` riêng — copy thành `.env` rồi điền
 
 | Biến | Ý nghĩa |
 |---|---|
-| `DB_HOST` `DB_PORT` `DB_USER` `DB_PASSWORD` `DB_NAME` | Kết nối PostgreSQL (local Docker: port `5433`) |
+| `DB_HOST` `DB_PORT` `DB_USER` `DB_PASSWORD` `DB_NAME` | Kết nối PostgreSQL (local Docker: port `5434`) |
+| `JWT_SECRET` | **Bắt buộc.** Khoá ký JWT — thiếu là backend dừng ngay lúc khởi động. Sinh bằng `openssl rand -base64 48` |
 | `PORT` | Cổng backend (mặc định `8082`) |
 | `GIN_MODE` | `release` hoặc `debug` |
 | `STATIC_DIR` | Thư mục build frontend để serve khi chạy production |

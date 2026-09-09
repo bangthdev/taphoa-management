@@ -5,6 +5,7 @@
 
 PROJECT_DIR="$HOME/Documents/taphoa-management"
 BACKEND_DIR="$PROJECT_DIR/backend"
+AGENT_DIR="$PROJECT_DIR/agent"
 FRONTEND_DIR="$PROJECT_DIR/frontend"
 LOG_DIR="$PROJECT_DIR/.logs"
 TUNNEL_MODE=false
@@ -20,6 +21,12 @@ fi
 
 mkdir -p "$LOG_DIR"
 
+# Backend đọc cấu hình từ biến môi trường chứ không tự nạp .env, và middleware/auth.go
+# gọi log.Fatal ngay lúc khởi tạo package nếu thiếu JWT_SECRET.
+set -a
+[ -f "$BACKEND_DIR/.env" ] && . "$BACKEND_DIR/.env"
+set +a
+
 # Màu cho log
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -34,20 +41,34 @@ if $TUNNEL_MODE; then
 fi
 echo -e "${CYAN}==============================${NC}"
 
-# Kill previous processes
+# Kill previous processes.
+# `go run` sinh ra một binary con trong ~/.cache/go-build với cmdline hoàn toàn khác,
+# nên pkill theo đường dẫn source không giết được nó và tiến trình cũ vẫn giữ cổng
+# (config mới sẽ không bao giờ có hiệu lực). Giải phóng theo cổng mới chắc chắn.
+free_port() {
+    local port=$1
+    local pids
+    pids=$(ss -ltnp 2>/dev/null | grep ":$port " | grep -oP 'pid=\K[0-9]+' | sort -u)
+    [ -n "$pids" ] && kill $pids 2>/dev/null
+}
+
 pkill -f "taphoa-management/backend.*main.go" 2>/dev/null
 pkill -f "vite.*taphoa" 2>/dev/null
+pkill -f "langgraphjs dev" 2>/dev/null
 pkill -f "cloudflared tunnel run $TUNNEL_NAME" 2>/dev/null
+free_port 8082
+free_port 3000
+free_port 2024
 # Đợi port được giải phóng
-sleep 1
+sleep 2
 
 # 1. PostgreSQL (docker)
-echo -e "\n${YELLOW}[1/3] Starting PostgreSQL...${NC}"
+echo -e "\n${YELLOW}[1/4] Starting PostgreSQL...${NC}"
 if docker ps --format '{{.Names}}' | grep -q 'taphoa-db'; then
     echo -e "${GREEN}  ✓ PostgreSQL already running${NC}"
 else
     docker compose -f "$PROJECT_DIR/docker-compose.yml" up -d
-    echo -e "${GREEN}  ✓ PostgreSQL started (port 5433)${NC}"
+    echo -e "${GREEN}  ✓ PostgreSQL started (port 5434)${NC}"
 fi
 
 # Đợi PostgreSQL sẵn sàng
@@ -63,7 +84,9 @@ done
 
 # Setup URLs
 API_URL_ENV=""
-FRONTEND_URL_ENV="http://localhost:3000"
+# Danh sách origin cho CORS. Luôn kèm domain tunnel để mở bằng đường nào cũng đăng nhập được,
+# không phụ thuộc vào việc có truyền --tunnel hay không.
+FRONTEND_URL_ENV="http://localhost:3000,https://$FRONTEND_DOMAIN"
 
 if $TUNNEL_MODE; then
     if ! command -v cloudflared &> /dev/null; then
@@ -88,19 +111,31 @@ if $TUNNEL_MODE; then
     done
 
     API_URL_ENV="https://$BACKEND_DOMAIN/api"
-    FRONTEND_URL_ENV="https://$FRONTEND_DOMAIN"
     echo -e "${GREEN}  Frontend: https://$FRONTEND_DOMAIN${NC}"
     echo -e "${GREEN}  Backend:  https://$BACKEND_DOMAIN${NC}"
 fi
 
 # 2. Backend (Go) - chạy background, ghi log
-echo -e "\n${YELLOW}[2/3] Starting Backend...${NC}"
+echo -e "\n${YELLOW}[2/4] Starting Backend...${NC}"
 (cd "$BACKEND_DIR" && FRONTEND_URL="$FRONTEND_URL_ENV" go run main.go) > "$LOG_DIR/backend.log" 2>&1 &
 echo $! > "$LOG_DIR/backend.pid"
 echo -e "${GREEN}  ✓ Backend starting (port 8082)${NC}"
 
+# 3. AI Agent (langgraph) - trợ lý trong app gọi qua proxy /agent của vite → :2024.
+# Không chạy cái này thì widget Trợ lý im lặng và console đầy ERR_CONNECTION_REFUSED.
+echo -e "\n${YELLOW}[3/4] Starting AI Agent...${NC}"
+if [ -f "$AGENT_DIR/.env" ]; then
+    # --no-browser: mặc định langgraphjs dev tự mở LangGraph Studio trên tab mới,
+    # không mong muốn khi đang trình diễn.
+    (cd "$AGENT_DIR" && npm run dev -- --no-browser) > "$LOG_DIR/agent.log" 2>&1 &
+    echo $! > "$LOG_DIR/agent.pid"
+    echo -e "${GREEN}  ✓ Agent starting (port 2024)${NC}"
+else
+    echo -e "${RED}  ✗ Thiếu $AGENT_DIR/.env — bỏ qua agent, widget Trợ lý sẽ không hoạt động${NC}"
+fi
+
 # 3. Frontend (React) - chạy background, ghi log
-echo -e "\n${YELLOW}[3/3] Starting Frontend...${NC}"
+echo -e "\n${YELLOW}[4/4] Starting Frontend...${NC}"
 if $TUNNEL_MODE; then
     (cd "$FRONTEND_DIR" && VITE_API_URL="$API_URL_ENV" npm start) > "$LOG_DIR/frontend.log" 2>&1 &
 else
@@ -110,8 +145,9 @@ echo $! > "$LOG_DIR/frontend.pid"
 echo -e "${GREEN}  ✓ Frontend starting (port 3000)${NC}"
 
 echo -e "\n${CYAN}==============================${NC}"
-echo -e "  DB:       ${GREEN}localhost:5433${NC}"
+echo -e "  DB:       ${GREEN}localhost:5434${NC}"
 echo -e "  Backend:  ${GREEN}localhost:8082${NC}"
+echo -e "  Agent:    ${GREEN}localhost:2024${NC}"
 echo -e "  Frontend: ${GREEN}localhost:3000${NC}"
 if $TUNNEL_MODE; then
     echo -e "${CYAN}------------------------------${NC}"
