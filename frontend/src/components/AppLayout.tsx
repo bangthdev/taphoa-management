@@ -30,7 +30,7 @@ import {
   Divider,
 } from 'antd';
 import type { MenuProps } from 'antd';
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useLayoutEffect, useRef } from 'react';
 import { useNavigate, useLocation, Outlet } from 'react-router-dom';
 
 import { APP_NAME } from '../constants';
@@ -115,6 +115,49 @@ export default function AppLayout() {
   // Match /customers/:id → /customers, /invoices/:id → /invoices
   const selectedKey = location.pathname.replace(/\/\d+$/, '') || '/';
   const menuItems = useMemo(() => getMenuItems(user?.role), [user?.role]);
+
+  // Chip điều hướng: đo mục đang chọn rồi trượt một phần tử dùng chung tới đó.
+  // Phải đo bằng getBoundingClientRect chứ không phải offsetLeft, vì mục nằm
+  // trong nhiều lớp lồng nhau của antd và offsetParent không đoán trước được.
+  const navRef = useRef<HTMLDivElement>(null);
+  const [pill, setPill] = useState<{
+    left: number;
+    top: number;
+    width: number;
+    height: number;
+  } | null>(null);
+
+  useLayoutEffect(() => {
+    const host = navRef.current;
+    if (!host) return;
+
+    const measure = () => {
+      // Khi thanh chật, antd đẩy bớt mục vào dropdown "..." — lúc đó mục đang
+      // chọn không còn chỗ nào để đo, và chip phải tự ẩn thay vì đứng sai chỗ.
+      const active = host.querySelector<HTMLElement>(
+        '.ant-menu-item-selected, .ant-menu-submenu-selected'
+      );
+      if (!active || active.offsetParent === null) {
+        setPill(null);
+        return;
+      }
+      const a = active.getBoundingClientRect();
+      const h = host.getBoundingClientRect();
+      setPill({ left: a.left - h.left, top: a.top - h.top, width: a.width, height: a.height });
+    };
+
+    // Đo lại ở khung hình kế tiếp: antd tính lại phần tràn sau khi bố cục xong,
+    // nên lần đo đầu tiên có thể rơi vào lúc mục còn chưa ở vị trí cuối cùng.
+    const remeasure = () => {
+      measure();
+      requestAnimationFrame(measure);
+    };
+
+    remeasure();
+    const observer = new ResizeObserver(remeasure);
+    observer.observe(host);
+    return () => observer.disconnect();
+  }, [selectedKey, menuItems]);
 
   const [closeModal, setCloseModal] = useState(false);
   const [openForm] = Form.useForm();
@@ -242,22 +285,33 @@ export default function AppLayout() {
 
         {/* Menu ngang — mode="horizontal" tự gom mục tràn vào dropdown "…" khi
             hẹp, nên không cần state openKeys/getOpenKey như menu dọc cũ. */}
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          selectedKeys={[selectedKey]}
-          items={menuItems}
-          onClick={({ key }) => {
-            if (!key.startsWith('/')) return;
-            navigate(key);
-          }}
-          style={{
-            flex: 1,
-            minWidth: 0,
-            borderBottom: 'none',
-            background: 'transparent',
-          }}
-        />
+        <div ref={navRef} style={{ position: 'relative', flex: 1, minWidth: 0 }}>
+          <span
+            aria-hidden
+            className="taphoa-nav-pill"
+            style={{
+              opacity: pill ? 1 : 0,
+              transform: `translate(${pill?.left ?? 0}px, ${pill?.top ?? 0}px)`,
+              width: pill?.width ?? 0,
+              height: pill?.height ?? 0,
+            }}
+          />
+          <Menu
+            theme="dark"
+            mode="horizontal"
+            selectedKeys={[selectedKey]}
+            items={menuItems}
+            onClick={({ key }) => {
+              if (!key.startsWith('/')) return;
+              navigate(key);
+            }}
+            style={{
+              minWidth: 0,
+              borderBottom: 'none',
+              background: 'transparent',
+            }}
+          />
+        </div>
 
         {/* Ca hiện tại + Thay ca — ít quan trọng nhất trong dải header nên là
             khối đầu tiên co lại (minWidth 0 + ellipsis) khi màn hẹp; icon và
