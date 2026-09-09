@@ -32,7 +32,6 @@ const POSPage = React.lazy(() => import('./pages/POSPage'));
 const AlertsPage = React.lazy(() => import('./pages/AlertsPage'));
 const ReportsPage = React.lazy(() => import('./pages/ReportsPage'));
 
-// 🎨 Theme mới - Xanh ngọc (Teal) tươi mát, chuyên nghiệp
 // ⚡ React Query Client - Cấu hình caching và refetching
 const queryClient = new QueryClient({
   defaultOptions: {
