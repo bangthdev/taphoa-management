@@ -43,8 +43,9 @@ const scale = {
   slate600: '#475569',
   slate800: '#1e293b',
 
-  gray900: '#1f2937',
-  gray50: '#f6f6fb',
+  gray600: '#4b5563',
+  gray800: '#1f2937',
+  violetPale: '#f6f6fb',
 } as const;
 
 export const colors = {
@@ -60,7 +61,7 @@ export const colors = {
   brandInk: scale.indigo900,
   /** Chữ và icon đặt trên nền thương hiệu đậm hoặc trên sidebar */
   onBrand: scale.white,
-  /** 3.5:1–3.7:1 against sidebar gradient; use for labels and icons, not body text */
+  /** 3.49:1–4.05:1 so với gradient sidebar; dùng cho nhãn và biểu tượng, không dùng cho đoạn text */
   onBrandMuted: 'rgba(255, 255, 255, 0.72)',
   onBrandBorder: 'rgba(255, 255, 255, 0.28)',
   onBrandActiveBg: 'rgba(255, 255, 255, 0.18)',
@@ -92,15 +93,15 @@ export const colors = {
   customer: scale.teal500,
 
   /* ---------- Chữ ---------- */
-  text: scale.gray900,
+  text: scale.gray800,
   /** Nhãn, mô tả. Gray 600 để đạt tỉ lệ tương phản 4.5:1 trên nền trắng */
-  textSecondary: '#4b5563',
-  /** Dimmest text that still meets WCAG AA for body text (4.76:1 on white) */
+  textSecondary: scale.gray600,
+  /** Chữ mờ nhất còn đọc được: placeholder, trạng thái rỗng. Tương phản 4.76:1 đạt chuẩn AA */
   textMuted: scale.slate500,
 
   /* ---------- Bề mặt ---------- */
   /** Nền ngoài cùng của trang */
-  bg: scale.gray50,
+  bg: scale.violetPale,
   /** Nền của card, bảng, modal */
   surface: scale.white,
   /** Nền chìm: vùng bị vô hiệu, ô tổng kết */
