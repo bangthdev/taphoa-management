@@ -22,7 +22,7 @@ export default function ChatInput({ isLoading, onSend }: Props) {
     for (const f of files) {
       try {
         const block = await fileToImageBlock(f);
-        setImages((prev) => [...prev, block]);
+        setImages(prev => [...prev, block]);
       } catch (err) {
         antMessage.error(err instanceof Error ? err.message : 'Đọc ảnh thất bại');
       }
@@ -51,7 +51,7 @@ export default function ChatInput({ isLoading, onSend }: Props) {
                 size="small"
                 shape="circle"
                 icon={<CloseOutlined />}
-                onClick={() => setImages((prev) => prev.filter((_, j) => j !== i))}
+                onClick={() => setImages(prev => prev.filter((_, j) => j !== i))}
                 style={{ position: 'absolute', top: -6, right: -6 }}
               />
             </div>
@@ -76,11 +76,11 @@ export default function ChatInput({ isLoading, onSend }: Props) {
         />
         <Input.TextArea
           value={text}
-          onChange={(e) => setText(e.target.value)}
+          onChange={e => setText(e.target.value)}
           placeholder="Hỏi gì đó hoặc đính ảnh hóa đơn…"
           autoSize={{ minRows: 1, maxRows: 4 }}
           className="taphoa-chat-input"
-          onPressEnter={(e) => {
+          onPressEnter={e => {
             if (!e.shiftKey) {
               e.preventDefault();
               handleSend();

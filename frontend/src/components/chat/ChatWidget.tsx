@@ -15,7 +15,7 @@ const PANEL_H = 560;
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [threadId, setThreadId] = useState<string | null>(() =>
-    typeof window !== 'undefined' ? localStorage.getItem(THREAD_STORAGE_KEY) : null,
+    typeof window !== 'undefined' ? localStorage.getItem(THREAD_STORAGE_KEY) : null
   );
   const [error, setError] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -29,11 +29,11 @@ export default function ChatWidget() {
     assistantId: 'agent',
     messagesKey: 'messages',
     threadId: threadId ?? undefined,
-    onThreadId: (id) => {
+    onThreadId: id => {
       setThreadId(id);
       localStorage.setItem(THREAD_STORAGE_KEY, id);
     },
-    onError: (err) => {
+    onError: err => {
       const msg = err instanceof Error ? err.message : String(err);
       setError(msg);
     },
@@ -41,7 +41,7 @@ export default function ChatWidget() {
 
   const messages = useMemo<ChatMessageData[]>(
     () => (stream.messages as ChatMessageData[] | undefined) ?? [],
-    [stream.messages],
+    [stream.messages]
   );
 
   // Auto-scroll xuống cuối khi có tin mới
@@ -92,7 +92,7 @@ export default function ChatWidget() {
         icon={<MessageOutlined />}
         type="primary"
         tooltip="Trợ lý"
-        onClick={() => setOpen((v) => !v)}
+        onClick={() => setOpen(v => !v)}
         style={{ right: 24, bottom: 24 }}
       />
       {open && (

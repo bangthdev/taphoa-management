@@ -25,18 +25,16 @@ interface Props {
 function extractText(content: ChatMessageData['content']): string {
   if (typeof content === 'string') return content;
   return content
-    .filter((b) => b.type === 'text' && typeof b.text === 'string')
-    .map((b) => b.text)
+    .filter(b => b.type === 'text' && typeof b.text === 'string')
+    .map(b => b.text)
     .join('\n');
 }
 
-function extractImages(
-  content: ChatMessageData['content'],
-): Array<{ mime: string; data: string }> {
+function extractImages(content: ChatMessageData['content']): Array<{ mime: string; data: string }> {
   if (typeof content === 'string') return [];
   return content
-    .filter((b) => b.type === 'image' && b.data && b.mimeType)
-    .map((b) => ({ mime: b.mimeType as string, data: b.data as string }));
+    .filter(b => b.type === 'image' && b.data && b.mimeType)
+    .map(b => ({ mime: b.mimeType as string, data: b.data as string }));
 }
 
 export default function ChatMessage({ message }: Props) {

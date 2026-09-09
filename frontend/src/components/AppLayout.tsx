@@ -173,9 +173,7 @@ export default function AppLayout() {
         width: 500,
         content: (
           <Descriptions bordered size="small" column={1} style={{ marginTop: 16 }}>
-            <Descriptions.Item label="Nhân viên">
-              {closedShift.cashier_name}
-            </Descriptions.Item>
+            <Descriptions.Item label="Nhân viên">{closedShift.cashier_name}</Descriptions.Item>
             <Descriptions.Item label="Tiền đầu ca">
               {formatVND(closedShift.opening_cash)}
             </Descriptions.Item>

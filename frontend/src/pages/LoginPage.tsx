@@ -6,7 +6,8 @@ import {
   ShopOutlined,
 } from '@ant-design/icons';
 import { message } from 'antd';
-import { FormEvent, useEffect, useState } from 'react';
+import type { FormEvent } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { APP_NAME } from '../constants';
@@ -93,7 +94,7 @@ export default function LoginPage() {
                   maxLength={10}
                   autoComplete="tel"
                   value={phone}
-                  onChange={(e) => {
+                  onChange={e => {
                     setPhone(e.target.value);
                     setPhoneError('');
                   }}
@@ -111,7 +112,7 @@ export default function LoginPage() {
                   placeholder="Mật khẩu"
                   autoComplete="current-password"
                   value={password}
-                  onChange={(e) => {
+                  onChange={e => {
                     setPassword(e.target.value);
                     setPasswordError('');
                   }}

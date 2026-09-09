@@ -126,7 +126,9 @@ export const Breadcrumbs: React.FC = memo(function Breadcrumbs() {
         title: item.isLast ? (
           <span>{item.label}</span>
         ) : item.path === '/' ? (
-          <Link to="/"><HomeOutlined /></Link>
+          <Link to="/">
+            <HomeOutlined />
+          </Link>
         ) : item.path === '' ? (
           <span>{item.label}</span>
         ) : (
