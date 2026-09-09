@@ -17,17 +17,17 @@
  */
 export const type = {
   /** Nhãn KPI, header bảng. Đi kèm chữ hoa và giãn ký tự, không đi một mình. */
-  label: 14,
+  label: 12,
   /** Thân bài, ô nhập, nội dung bảng. 16px là ngưỡng chữ thân bài của web. */
-  body: 18,
+  body: 16,
   /** Tiêu đề card, dòng nhấn trong danh sách. */
-  lead: 22,
+  lead: 20,
   /** Tiêu đề trang. */
-  title: 27,
+  title: 25,
   /** Số liệu KPI ở trang Tổng quan. */
-  metric: 33,
+  metric: 31,
   /** Con số quan trọng nhất một màn hình có: THÀNH TIỀN ở màn bán hàng. */
-  hero: 44,
+  hero: 42,
 } as const;
 
 export const weight = {
