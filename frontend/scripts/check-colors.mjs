@@ -14,11 +14,9 @@ const ALLOWLIST = [
   'components/chat/ChatInput.tsx',
   'components/chat/ChatMessage.tsx',
   'pages/CreatePurchaseOrderPage.tsx',
-  'pages/DashboardPage.tsx',
   'pages/LoginPage.css',
   'pages/POSPage.tsx',
   'pages/ProductsPage.tsx',
-  'pages/ReportsPage.tsx',
 ];
 
 const COLOR = /#[0-9a-fA-F]{3,8}\b|\b(?:rgba?|hsla?)\s*\([^)]*\)/gi;
@@ -61,6 +59,4 @@ if (offenders.length > 0) {
   process.exit(1);
 }
 
-console.log(
-  `check-colors: sạch (${ALLOWLIST.length} file còn trong danh sách chờ migrate).`
-);
+console.log(`check-colors: sạch (${ALLOWLIST.length} file còn trong danh sách chờ migrate).`);

@@ -22,10 +22,11 @@ import {
   useExpiryAlerts,
   useRevenueReport,
 } from '../hooks';
+import { colors } from '../theme/colors';
 import type { Invoice } from '../types';
 import { formatVND } from '../utils/format';
 
-const statIconStyle = { fontSize: 18, color: '#0d9488', marginRight: 6 };
+const statIconStyle = { fontSize: 18, color: colors.brand, marginRight: 6 };
 
 const yAxisFormatter = (v: unknown) => {
   const n = typeof v === 'number' ? v : 0;
@@ -199,7 +200,7 @@ function DashboardPage() {
               title="Cảnh báo"
               value={totalAlerts}
               prefix={<AlertOutlined style={statIconStyle} />}
-              valueStyle={totalAlerts > 0 ? { color: '#cf1322' } : undefined}
+              valueStyle={totalAlerts > 0 ? { color: colors.danger } : undefined}
             />
           </Card>
         </Col>
@@ -209,7 +210,7 @@ function DashboardPage() {
               title="Ca hiện tại"
               value={currentShift ? `#${currentShift.id}` : 'Chưa mở'}
               prefix={<ClockCircleOutlined style={statIconStyle} />}
-              valueStyle={!currentShift ? { color: '#999' } : undefined}
+              valueStyle={!currentShift ? { color: colors.textMuted } : undefined}
             />
           </Card>
         </Col>
@@ -263,7 +264,7 @@ function DashboardPage() {
               <XAxis dataKey="date" />
               <YAxis tickFormatter={yAxisFormatter} />
               <Tooltip formatter={(v: unknown) => formatVND(typeof v === 'number' ? v : 0)} />
-              <Bar dataKey="Doanh thu" fill="#0d9488" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="Doanh thu" fill={colors.revenue} radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </Card>
@@ -275,7 +276,7 @@ function DashboardPage() {
           <Card
             title={
               <Space>
-                <AlertOutlined style={{ color: '#cf1322' }} /> Sắp hết hạn
+                <AlertOutlined style={{ color: colors.danger }} /> Sắp hết hạn
               </Space>
             }
             size="small"
@@ -297,7 +298,7 @@ function DashboardPage() {
           <Card
             title={
               <Space>
-                <WarningOutlined style={{ color: '#faad14' }} /> Sắp hết hàng
+                <WarningOutlined style={{ color: colors.warning }} /> Sắp hết hàng
               </Space>
             }
             size="small"

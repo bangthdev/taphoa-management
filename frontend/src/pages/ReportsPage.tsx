@@ -40,6 +40,7 @@ import type { LabelProps } from 'recharts';
 import { PageHeader } from '../components/common';
 import { useRevenueReport, useProfitReport, useCompareReport, useTopProducts } from '../hooks';
 import api from '../services/api';
+import { colors } from '../theme/colors';
 import type { TopProductItem } from '../types';
 import { formatVND } from '../utils/format';
 
@@ -86,7 +87,13 @@ const renderPointLabel = (total: number) => (props: LabelProps) => {
   const index = typeof props.index === 'number' ? props.index : 0;
   const anchor = index === 0 ? 'start' : index === total - 1 ? 'end' : 'middle';
   return (
-    <text x={num(props.x)} y={num(props.y) - 8} textAnchor={anchor} fontSize={11} fill="#4b5563">
+    <text
+      x={num(props.x)}
+      y={num(props.y) - 8}
+      textAnchor={anchor}
+      fontSize={11}
+      fill={colors.textSecondary}
+    >
       {yAxisFormatter(num(props.value))}
     </text>
   );
@@ -213,7 +220,7 @@ function RevenueTab() {
               title="Doanh thu"
               value={revenue?.total_revenue ?? 0}
               formatter={v => formatVND(v as number)}
-              valueStyle={{ color: '#0d9488' }}
+              valueStyle={{ color: colors.revenue }}
               prefix={<DollarOutlined style={statIconStyle} />}
             />
           </Card>
@@ -224,7 +231,7 @@ function RevenueTab() {
               title="Giá vốn"
               value={revenue?.total_cogs ?? 0}
               formatter={v => formatVND(v as number)}
-              valueStyle={{ color: '#6b7280' }}
+              valueStyle={{ color: colors.cost }}
               prefix={<ShoppingCartOutlined style={statIconStyle} />}
             />
           </Card>
@@ -235,7 +242,7 @@ function RevenueTab() {
               title="Lợi nhuận"
               value={revenue?.total_profit ?? 0}
               formatter={v => formatVND(v as number)}
-              valueStyle={{ color: '#22c55e' }}
+              valueStyle={{ color: colors.profit }}
               prefix={<RiseOutlined style={statIconStyle} />}
             />
           </Card>
@@ -245,7 +252,7 @@ function RevenueTab() {
             <Statistic
               title="Số hóa đơn"
               value={revenue?.invoice_count ?? 0}
-              valueStyle={{ color: '#0d9488' }}
+              valueStyle={{ color: colors.brand }}
               prefix={<ShoppingCartOutlined style={statIconStyle} />}
             />
           </Card>
@@ -256,7 +263,7 @@ function RevenueTab() {
               title="Tổng giảm giá"
               value={revenue?.total_discount ?? 0}
               formatter={v => formatVND(v as number)}
-              valueStyle={{ color: '#f59e0b' }}
+              valueStyle={{ color: colors.lowStock }}
               prefix={<PercentageOutlined style={statIconStyle} />}
             />
           </Card>
@@ -273,7 +280,7 @@ function RevenueTab() {
             <Tooltip formatter={vndFormatter} />
             <Bar
               dataKey="Doanh thu"
-              fill="#0d9488"
+              fill={colors.revenue}
               radius={[4, 4, 0, 0]}
               label={{ position: 'top', formatter: yAxisFormatter, fontSize: 11 }}
             />
@@ -292,8 +299,8 @@ function RevenueTab() {
             <Area
               type="monotone"
               dataKey="Lợi nhuận"
-              stroke="#22c55e"
-              fill="#bbf7d0"
+              stroke={colors.profit}
+              fill={colors.profitSoft}
               dot={{ r: 3 }}
               label={renderPointLabel(areaData.length)}
             />
@@ -309,7 +316,7 @@ function RevenueTab() {
 function ChangeTag({ pct }: { pct: number }) {
   const isPos = pct >= 0;
   return (
-    <Typography.Text style={{ color: isPos ? '#22c55e' : '#ef4444', fontWeight: 600 }}>
+    <Typography.Text style={{ color: isPos ? colors.success : colors.danger, fontWeight: 600 }}>
       {isPos ? `+${pct}%↑` : `${pct}%↓`}
     </Typography.Text>
   );
@@ -388,8 +395,8 @@ function CompareTab() {
             <YAxis tickFormatter={yAxisFormatter} />
             <Tooltip formatter={vndFormatter} />
             <Legend />
-            <Bar dataKey="Kỳ trước" fill="#9ca3af" radius={[4, 4, 0, 0]} />
-            <Bar dataKey="Kỳ này" fill="#0d9488" radius={[4, 4, 0, 0]} />
+            <Bar dataKey="Kỳ trước" fill={colors.textMuted} radius={[4, 4, 0, 0]} />
+            <Bar dataKey="Kỳ này" fill={colors.revenue} radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>
       </Card>
@@ -407,7 +414,11 @@ function TopProductsTab() {
   const toStr = dateRange[1].format('YYYY-MM-DD');
   const { data = [], isLoading: loading } = useTopProducts(fromStr, toStr, sortMode);
 
-  const rankColors: Record<number, string> = { 1: '#facc15', 2: '#9ca3af', 3: '#f97316' };
+  const rankColors: Record<number, string> = {
+    1: colors.rankGold,
+    2: colors.rankSilver,
+    3: colors.rankBronze,
+  };
 
   const columns = [
     {
@@ -448,7 +459,7 @@ function TopProductsTab() {
       dataIndex: 'profit',
       key: 'profit',
       render: (v: number) => (
-        <Typography.Text strong style={{ color: '#22c55e' }}>
+        <Typography.Text strong style={{ color: colors.profit }}>
           {formatVND(v)}
         </Typography.Text>
       ),

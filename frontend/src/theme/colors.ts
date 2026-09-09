@@ -46,6 +46,10 @@ const scale = {
   gray600: '#4b5563',
   gray800: '#1f2937',
   violetPale: '#f6f6fb',
+
+  emerald200: '#bbf7d0',
+  amber400: '#facc15',
+  orange500: '#f97316',
 } as const;
 
 export const colors = {
@@ -93,6 +97,14 @@ export const colors = {
   stock: scale.sky500,
   /** Nhóm Khách hàng, công nợ */
   customer: scale.teal500,
+
+  /** Nền vùng tô dưới đường lợi nhuận trên biểu đồ */
+  profitSoft: scale.emerald200,
+
+  /* ---------- Huy hiệu xếp hạng (bảng sản phẩm bán chạy) ---------- */
+  rankGold: scale.amber400,
+  rankSilver: scale.slate400,
+  rankBronze: scale.orange500,
 
   /* ---------- Chữ ---------- */
   text: scale.gray800,
