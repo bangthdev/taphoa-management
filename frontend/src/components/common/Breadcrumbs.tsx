@@ -18,7 +18,10 @@ const routeLabels: Record<string, string> = {
   '/suppliers': 'Nhà cung cấp',
   '/inventory-checks': 'Kiểm kê',
   '/waste': 'Xuất hủy',
-  '/customers': 'Khách hàng',
+  // Nhãn phải khớp mục menu, không phải khớp tên nhóm: nhóm cha đã là
+  // "Khách hàng" rồi, để trang cũng tên vậy thì breadcrumb đọc thành
+  // "Khách hàng › Khách hàng".
+  '/customers': 'Danh sách',
   '/customers/:id': 'Chi tiết khách',
   '/debts': 'Công nợ',
   '/pos': 'Bán hàng',
