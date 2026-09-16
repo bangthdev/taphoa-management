@@ -190,6 +190,10 @@ html {
    rồi ghim chiều cao. */
 .ant-menu-horizontal.ant-menu-overflow {
   align-items: center;
+  /* Nền mục menu bo góc 10px nhưng margin mặc định là 0, nên hai mục cạnh nhau
+     dính sát, nhìn thành một khối liền. Tách bằng `gap` trên container thay vì
+     margin từng `li`: margin sẽ thừa cả ở hai đầu dải menu. */
+  gap: var(--t-space-sm);
 }
 
 .ant-menu-horizontal > .ant-menu-overflow-item,
