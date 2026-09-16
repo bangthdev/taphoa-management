@@ -62,7 +62,7 @@ export const layout = {
    * antd, vì CSS cũng cần nó: antd vẽ nền lên chính thẻ `li`, mà `li` là flex
    * item bị kéo giãn theo chiều cao của thanh — `line-height` không chặn được.
    */
-  navItemHeight: 34,
+  navItemHeight: 50,
 } as const;
 
 export const radius = {
