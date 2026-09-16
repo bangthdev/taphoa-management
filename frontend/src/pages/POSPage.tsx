@@ -40,7 +40,7 @@ import { useAuth } from '../contexts/useAuth';
 import { useProducts, useCustomers, useCurrentShift, useCreateInvoice } from '../hooks';
 import api from '../services/api';
 import { colors } from '../theme/colors';
-import { type, weight, radius } from '../theme/typography';
+import { type, weight, radius, space } from '../theme/typography';
 import type { ProductWithStock } from '../types';
 import { formatVND, inputNumberFormatter, getErrorMessage } from '../utils/format';
 
@@ -419,7 +419,7 @@ export default function POSPage() {
             Bán hàng
           </Typography.Text>
         </Space>
-        <Space size="middle">
+        <div style={{ display: 'flex', alignItems: 'center', gap: space.lg }}>
           {currentShift ? (
             <Tag
               icon={<ClockCircleOutlined />}
@@ -449,7 +449,7 @@ export default function POSPage() {
           <Typography.Text style={{ color: colors.onBrand, fontSize: type.body }}>
             {user?.name}
           </Typography.Text>
-        </Space>
+        </div>
       </Layout.Header>
 
       {/* Order Tabs */}
@@ -893,10 +893,9 @@ export default function POSPage() {
                   marginBottom: 8,
                 }}
               >
-                {/* Nhãn kèm một con số lớn — cùng vai trò "nhãn KPI" type.label mô tả,
-                    không phải một dòng thân bài — nên lấy label thay vì body dù 14 gần
-                    body hơn theo số học. */}
-                <Typography.Text style={{ color: colors.onBrand, fontSize: type.label }}>
+                <Typography.Text
+                  style={{ color: colors.onBrand, fontSize: type.body, fontWeight: weight.medium }}
+                >
                   THÀNH TIỀN
                 </Typography.Text>
                 <Typography.Title
@@ -904,7 +903,7 @@ export default function POSPage() {
                   style={{
                     color: colors.onBrand,
                     margin: 0,
-                    fontSize: type.hero,
+                    fontSize: type.metric,
                     fontWeight: weight.bold,
                     fontVariantNumeric: 'tabular-nums',
                   }}
